@@ -32,6 +32,9 @@ Configured the receiving tab on Mac to open port 9997 to accept connections from
 
 <img width="1181" height="246" alt="Screenshot 2026-08-19 at 5 55 36 PM" src="https://github.com/user-attachments/assets/de76f2c7-de23-40fe-a190-2f3c38f627a8" />
 
+
+## Initial Set-up Troubleshooting:
+
 On two occasions with both the Windows 10 and the Windows 11 Surface Pro, I encountered an issue with the Splunk forwarders. Each restart 
 attempt would display “Error 1053” and the raw event logs were unable to reach the Splunk indexer. 
 
@@ -44,8 +47,68 @@ network and edited the output file with the correct IP.
 ## DASHBOARD 
 
 Purpose: This dashboard visualizes Windows system and security event logs with graphs and statistic tables. The panels shown were derived from SPL queries, 
-filtered to reduce noise and count real-time detections. The dashboard enhances alert visibility and monitoring by consolidating log results and facilitating 
+filtered to reduce noise and count real-time detections. The SOC dashboard was designed to enhance alert visibility and monitoring by consolidating log results and facilitating 
 analysis. The following panels include: Successful Logins, Privileged Logons, Top Failed Logons, Brute Forcing Detection, Total Successful vs Failed Logins
 
-c
+
+## PANEL 1: Successful Logons By Account - Past 30 Days
+
+
+
+
+
+
+
+## Problems: 
+
+
+During dashboard validation, duplicate-looking Windows Event ID 4624 records caused successful logon counts to become inflated. The other major issue was noisy background 
+detection caused by two Windows services, Desktop Window Manager (DWM) and User Mode Font Driver (UMFD). Both of which created local interactive sessions that counted higher results 
+without differentiating between display system behavior and human interacted logins.
+
+
+
+To reduce the detection noise, I filtered the DWM and UMFD logons using the following command:
+
+| where NOT match(all_account_values_joined,"(^|\\|)(DWM-[0-9]+|UMFD-[0-9]+)(\\||$)"). 
+
+
+
+
+To address the deduplication I filtered for the EventRecordID and raw-event hashes:
+
+| eval raw_hash=md5(_raw)
+| eval unique_event=coalesce(record_id, raw_hash)
+| dedup host unique_event
+
+
+
+
+My initial attempt was effective in removing the DWM and UMFD logs. However, the duplicated logs still remained after filtering. because the records differed internally despite 
+representing the same visible login activity. 
+
+
+<img width="786" height="566" alt="Screenshot 2026-08-20 at 10 35 56 AM" src="https://github.com/user-attachments/assets/9776f0ed-5514-4bb2-aab0-3fffbcaa8480" />
+
+
+
+
+
+
+During my troubleshoot, I discovered records differed internally despite representing the same visible login activity. To solve this, I further fine tuned the detection logic  
+by normalizing multi-value account fields, filtering background accounts and deduplicating events using timestamp instead of the md5 hashes. By combining these techniques, it allowed me to 
+produce a more accurate representation of real interactive user authentication activity.
+
+Final SPL Search
+
+
+
+
+
+<img width="912" height="393" alt="Screenshot 2026-08-20 at 11 24 52 AM" src="https://github.com/user-attachments/assets/198c9567-9ea9-4997-8b24-d62a9bbacc2f" />
+
+
+
+
+
 
