@@ -54,11 +54,6 @@ analysis. The following panels include: Successful Logins, Privileged Logons, To
 ## PANEL 1: Successful Logons By Account - Past 30 Days
 
 
-
-
-
-
-
 ## Problems: 
 
 
@@ -66,23 +61,23 @@ During dashboard validation, duplicate-looking Windows Event ID 4624 records cau
 detection caused by two Windows services, Desktop Window Manager (DWM) and User Mode Font Driver (UMFD). Both of which created local interactive sessions that counted higher results 
 without differentiating between display system behavior and human interacted logins.
 
-
+----------------
 
 To reduce the detection noise, I filtered the DWM and UMFD logons using the following command:
 
 | where NOT match(all_account_values_joined,"(^|\\|)(DWM-[0-9]+|UMFD-[0-9]+)(\\||$)"). 
 
+-----------------
 
 
-
-To address the deduplication I filtered for the EventRecordID and raw-event hashes:
+To address the deduplication, I filtered for the EventRecordID and raw-event hashes:
 
 | eval raw_hash=md5(_raw)
 | eval unique_event=coalesce(record_id, raw_hash)
 | dedup host unique_event
 
 
-
+---------
 
 My initial attempt was effective in removing the DWM and UMFD logs. However, the duplicated logs still remained after filtering. because the records differed internally despite 
 representing the same visible login activity. 
@@ -90,25 +85,39 @@ representing the same visible login activity.
 
 <img width="786" height="566" alt="Screenshot 2026-08-20 at 10 35 56 AM" src="https://github.com/user-attachments/assets/9776f0ed-5514-4bb2-aab0-3fffbcaa8480" />
 
-
-
-
-
-
-During my troubleshoot, I discovered records differed internally despite representing the same visible login activity. To solve this, I further fine tuned the detection logic  
-by normalizing multi-value account fields, filtering background accounts and deduplicating events using timestamp instead of the md5 hashes. By combining these techniques, it allowed me to 
-produce a more accurate representation of real interactive user authentication activity.
-
-Final SPL Search
-
-
+--------
 
 
 
 <img width="912" height="393" alt="Screenshot 2026-08-20 at 11 24 52 AM" src="https://github.com/user-attachments/assets/198c9567-9ea9-4997-8b24-d62a9bbacc2f" />
 
+----------
 
 
+## Solution: 
 
+During my troubleshoot, I discovered the records differed internally despite representing the same visible login activity. To solve this, I further fine tuned the detection logic by 
+normalizing multi-value account fields, filtering background accounts and deduplicating events using timestamp instead of the md5 hashes. By combining these techniques, it allowed 
+me to produce a more accurate representation of real interactive user authentication activity.
+
+Final SPL Search:
+
+| dedup _time host logon_account logon_type
+| stats count as successful_logons by host logon_account
+| sort host - successful_logons
+
+______________
+
+<img width="794" height="504" alt="Screenshot 2026-08-20 at 11 33 34 AM" src="https://github.com/user-attachments/assets/ffc21149-b59e-43fd-9460-ca991f123098" />
+
+_________
+
+
+<img width="1192" height="143" alt="Screenshot 2026-08-20 at 12 18 18 PM" src="https://github.com/user-attachments/assets/19d3f1bb-ebc1-4bd2-a97f-9bd53f247749" />
+
+
+____
+
+##PANEL: 
 
 
