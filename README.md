@@ -53,6 +53,8 @@ analysis. The following panels include: Successful Logins, Privileged Logons, To
 
 ## PANEL 1: Successful Logons By Account - Past 30 Days
 
+Overview: 
+
 
 ## Problems: 
 
@@ -118,6 +120,143 @@ _________
 
 ____
 
-##PANEL: 
+## PANEL 2: PRILVILEGED LOGONS BY ACCOUNT - PAST 30 DAYS 
+
+This panel was appended to the SPLUNK dashboard to track access on privileged accounts. This is can be very helpful for catching potential threats by using timestamps to capture when the account logon occurred and determining their access to data.
+
+Problems:
+
+In comparison to the previous panel, I consolidated the fields and filtered the noise from background system processes. I performed both these functions using the eval command. I didn't encounter difficulty in my initial attempt. 
+
+___
+
+<img width="1017" height="402" alt="Screenshot 2026-08-29 at 1 13 53 PM" src="https://github.com/user-attachments/assets/abf09106-adee-4f6a-8558-bad916fc348b" />
+
+___
+
+For the data visualization I selected the bar graph. Its presentation offers the clearest view of the highest instances of privileged logons and included interaction that reveals the events associated with each account. 
+
+___
+
+<img width="698" height="281" alt="Screenshot 2026-08-29 at 1 22 46 PM" src="https://github.com/user-attachments/assets/397a78f4-d396-4e0f-aa16-68ec8ed5a981" />
+
+___
+
+## PANEL 3: FAILED LOGONS - PAST 30 DAYS 
+
+
+Overview:
+
+This SPL query identifies and counts failed Windows logon attempts (4625). It filters out invalid, empty, and Guest account values, then checks multiple possible username fields to determine which account experienced the failed login. The query cleans and standardizes the account name, removes anonymous or unusable entries, and counts the total number of failed authentication attempts for each account. The results are sorted from the account with the most failed logins to the least, helping identify accounts that may be experiencing repeated authentication failures or potential brute-force activity.
+
+
+____
+
+<img width="660" height="247" alt="Screenshot 2026-08-29 at 1 38 13 PM" src="https://github.com/user-attachments/assets/fb3457fb-1296-4f27-8e72-2be2caf2b6eb" />
+
+____
+
+
+<img width="1039" height="256" alt="Screenshot 2026-08-29 at 1 39 51 PM" src="https://github.com/user-attachments/assets/1e804bf6-6b7f-4285-8d09-310e2cb34525" />
+
+___
+
+## PANEL 4: Failed Logins Within Five Minutes: Potential Brute Forcing
+
+
+This SPL query detects potential brute-force login activity by analyzing failed Windows authentication events (Event ID 4625) within the windows_lab index. It cleans and identifies the account associated with each failed login by checking multiple username fields, then removes invalid and anonymous account values. The query groups failed authentication attempts into 5-minute time intervals and counts them by account, host, and source network address. Any combination with five or more failed login attempts within a 5-minute period is flagged, and the results are sorted from the highest number of failures to the lowest. This helps highlight suspicious repeated login attempts that may indicate brute-force or password-guessing activity.
+
+
+______
+
+<img width="661" height="249" alt="Screenshot 2026-08-29 at 1 48 43 PM" src="https://github.com/user-attachments/assets/2192c57b-61cd-4000-a4c1-88f77c3f485f" />
+
+______
+
+<img width="1071" height="262" alt="Screenshot 2026-08-29 at 1 48 31 PM" src="https://github.com/user-attachments/assets/749420a2-f592-4175-ba31-26b4d5a38f1d" />
+
+_____
+
+
+## PANEL 5: SUCCESSFUL VS  FAILED LOGONS - PAST 30 DAYS
+
+
+This SPL query compares successful and failed Windows logon activity within the windows_lab index using Event IDs 4624 and 4625. It cleans and normalizes account information across multiple possible username fields while excluding Guest, Anonymous Logon, DWM, and UMFD system-generated accounts. For successful authentication events, the query focuses specifically on Logon Type 2, which represents interactive local logins, while retaining all failed logon events for comparison. It then categorizes each event as either a success or failure, removes duplicate events occurring for the same host, account, event type, logon type, and second, and displays the results in a daily timechart. This visualization helps compare successful versus failed authentication activity over time and can reveal unusual spikes or changes in login behavior.
+
+
+____
+
+index=windows_lab sourcetype="WinEventLog:Security" (EventCode=4624 OR EventCode=4625)
+
+| eval Account_Name=mvfilter(
+    Account_Name!="-" 
+    AND Account_Name!="" 
+    AND lower(Account_Name)!="guest"
+    AND Account_Name!="ANONYMOUS LOGON"
+)
+
+| eval logon_account=coalesce(
+    TargetUserName,
+    Target_Account_Name,
+    user,
+    src_user,
+    mvindex(Account_Name,0)
+)
+
+| eval logon_account=trim(logon_account)
+
+| eval all_account_values=mvappend(
+    Account_Name,
+    TargetUserName,
+    Target_Account_Name,
+    user,
+    src_user
+)
+
+| eval all_account_values_joined=upper(mvjoin(all_account_values,"|"))
+
+| where NOT match(
+    all_account_values_joined,
+    "(^|\\|)(DWM-[0-9]+|UMFD-[0-9]+)(\\||$)"
+)
+
+| where isnotnull(logon_account)
+    AND logon_account!=""
+    AND logon_account!="-"
+    AND lower(logon_account)!="guest"
+    AND logon_account!="ANONYMOUS LOGON"
+
+| eval logon_type=tostring(Logon_Type)
+
+| where EventCode=4625
+    OR (EventCode=4624 AND logon_type="2")
+
+| eval login_status=case(
+    EventCode=4624,"Success",
+    EventCode=4625,"Failure"
+)
+
+| eval event_second=strftime(_time,"%Y-%m-%d %H:%M:%S")
+
+| dedup host logon_account EventCode logon_type event_second
+
+| timechart span=1d count by login_status
+
+____
+
+
+<img width="1028" height="262" alt="Screenshot 2026-08-29 at 2 01 11 PM" src="https://github.com/user-attachments/assets/d9f470cb-3f3d-48aa-a048-6dffd2d6e69b" />
+
+____
+
+
+
+
+
+
+
+
+
+
 
 
