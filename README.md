@@ -161,28 +161,12 @@ ____
 
 ___
 
-## PANEL 4: Failed Logins Within Five Minutes: Potential Brute Forcing
 
 
-This SPL query detects potential brute-force login activity by analyzing failed Windows authentication events (Event ID 4625) within the windows_lab index. It cleans and identifies the account associated with each failed login by checking multiple username fields, then removes invalid and anonymous account values. The query groups failed authentication attempts into 5-minute time intervals and counts them by account, host, and source network address. Any combination with five or more failed login attempts within a 5-minute period is flagged, and the results are sorted from the highest number of failures to the lowest. This helps highlight suspicious repeated login attempts that may indicate brute-force or password-guessing activity.
+## PANEL 4: SUCCESSFUL VS  FAILED LOGONS - PAST 30 DAYS
 
 
-______
-
-<img width="661" height="249" alt="Screenshot 2026-08-29 at 1 48 43 PM" src="https://github.com/user-attachments/assets/2192c57b-61cd-4000-a4c1-88f77c3f485f" />
-
-______
-
-<img width="1071" height="262" alt="Screenshot 2026-08-29 at 1 48 31 PM" src="https://github.com/user-attachments/assets/749420a2-f592-4175-ba31-26b4d5a38f1d" />
-
-_____
-
-
-## PANEL 5: SUCCESSFUL VS  FAILED LOGONS - PAST 30 DAYS
-
-
-This SPL query compares successful and failed Windows logon activity within the windows_lab index using Event IDs 4624 and 4625. It cleans and normalizes account information across multiple possible username fields while excluding Guest, Anonymous Logon, DWM, and UMFD system-generated accounts. For successful authentication events, the query focuses specifically on Logon Type 2, which represents interactive local logins, while retaining all failed logon events for comparison. It then categorizes each event as either a success or failure, removes duplicate events occurring for the same host, account, event type, logon type, and second, and displays the results in a daily timechart. This visualization helps compare successful versus failed authentication activity over time and can reveal unusual spikes or changes in login behavior.
-
+This SPL query compares successful and failed Windows logon activity within the windows_lab index using Event IDs 4624 and 4625. It cleans and normalizes account information across multiple possible username fields while excluding Guest, Anonymous Logon, DWM, and UMFD system-generated accounts. For successful authentication events, the query focuses specifically on Logon Type 2, which represents interactive local logins, while retaining all failed logon events for comparison. It then categorizes each event as either a success or failure, removes duplicate events occurring for the same host, account, event type, logon type, and second, and displays the results in a daily timechart. 
 
 ____
 
@@ -242,6 +226,11 @@ index=windows_lab sourcetype="WinEventLog:Security" (EventCode=4624 OR EventCode
 
 | timechart span=1d count by login_status
 
+
+____
+
+
+
 ____
 
 
@@ -249,10 +238,50 @@ ____
 
 ____
 
+The line graph visualization helps compare successful versus failed authentication activity over time and can reveal unusual spikes or changes in login behavior.
+
+
+## PANEL 5: FAILURE BEFORE SUCCESFUL LOGONS
+
+
+This SPL query identifies successful Windows logins that occur shortly after multiple failed authentication attempts, which can help detect potential account compromise following password guessing or brute-force activity. It analyzes Event IDs 4624 and 4625, cleans and normalizes account information across multiple username fields, and determines the most appropriate source using the source IP address, workstation name, or host. Successful logins are limited to relevant interactive and remote logon types, while failed attempts are tracked for each account and source. The query then identifies successful logins that were preceded by at least three failed attempts and occurred within 30 minutes of the most recent failure. Duplicate successful sessions are removed, and the final results display the affected account, source, host, number of previous failures, timestamps of the first and last failures, time between the last failure and successful login, and logon type. This correlation helps identify suspicious authentication patterns where repeated failed attempts are followed by a successful login.
+
+____
+
+<img width="658" height="552" alt="Screenshot 2026-08-29 at 2 18 28 PM" src="https://github.com/user-attachments/assets/12217632-d250-40f2-a091-1673c9aa1735" />\
+
+____
+
+<img width="1255" height="290" alt="Screenshot 2026-08-29 at 2 30 10 PM" src="https://github.com/user-attachments/assets/d1b1be73-774e-4fc0-b7e9-c3d9a642b58f" />
+
+
+## PANEL 6: DETECTION NEW LOCAL USER ACCOUNT CREATED
+
+This SPL query identifies newly created Windows user accounts by analyzing Event ID 4720 within the windows_lab index. It extracts both the account responsible for creating the new user and the newly created account from the Account_Name field, then removes invalid, anonymous, and system-generated accounts such as WsiAccount. To prevent duplicate events from being counted multiple times, the query creates a unique event identifier using the event record ID, record number, or a hash of the raw event data. It then counts how many times each account was created, along with the account that performed the creation and the affected machine. The final results are renamed and organized into a readable table showing the account created, who created it, the machine involved, and the number of creation events. This helps monitor account provisioning activity and identify potentially unauthorized or suspicious user account creation.
+
+____
+
+<img width="750" height="321" alt="Screenshot 2026-08-29 at 2 44 37 PM" src="https://github.com/user-attachments/assets/3de7bc53-5ab0-4dad-a670-dc2406733995" />
+
+____
+
+<img width="706" height="253" alt="Screenshot 2026-08-29 at 2 44 57 PM" src="https://github.com/user-attachments/assets/946afbac-19cd-4302-ae19-c0a9e7d2b3cd" />
+
+____
+
+## PANEL 6: 
+
+
+This SPL query detects instances where the Windows Security audit log has been cleared by monitoring Event ID 1102 within the windows_lab index. It identifies the account responsible for the action by checking multiple possible username fields and removes invalid or anonymous account values. The query then creates a unique identifier for each event and removes duplicate records to prevent the same log-clearing activity from being counted multiple times. Finally, it counts the number of audit log clearing events by host and user account and sorts the results from highest to lowest. This detection is important because clearing Windows audit logs can indicate an attempt to remove evidence, evade monitoring, or conceal malicious activity after a system has been compromised.
 
 
 
+<img width="710" height="182" alt="Screenshot 2026-08-29 at 2 45 45 PM" src="https://github.com/user-attachments/assets/0b2beaf5-79eb-4826-bb0e-efc36ca93a99" />
 
+
+____
+
+<img width="542" height="142" alt="Screenshot 2026-08-29 at 2 45 27 PM" src="https://github.com/user-attachments/assets/103a8656-b1ba-4aea-99e2-0d1476387dbd" />
 
 
 
