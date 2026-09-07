@@ -48,7 +48,14 @@ UTM Cloning Cloning - Backups
 
 ____
 
-## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION<img width="748" height="253" alt="Screenshot 2026-09-05 at 4 25 46 PM" src="https://github.com/user-attachments/assets/fed7aa21-77c5-4901-9513-a20878c275cf" />
+## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION
+
+____
+
+<img width="748" height="253" alt="Screenshot 2026-09-05 at 4 25 46 PM" src="https://github.com/user-attachments/assets/fed7aa21-77c5-4901-9513-a20878c275cf" />
+
+
+
 <img width="776" height="238" alt="Screenshot 2026-09-05 at 4 25 27 PM" src="https://github.com/user-attachments/assets/7b13334e-1116-45ed-a046-bebab973f350" />
  
 
@@ -173,3 +180,93 @@ ____
 
 <img width="626" height="436" alt="Screenshot 2026-09-05 at 5 22 39 PM" src="https://github.com/user-attachments/assets/6d6e5080-bdce-400d-be45-6d2aa5fcaae6" />
 
+
+
+
+ProcessId
+    = Windows' current numerical ID for the process
+
+ProcessGuid
+    = Sysmon's unique identifier for this particular
+      process instance
+
+  ## STAGE 3: SPLUNK INGESTION - SPLUNK OPEN TELEMENTRY COLLECTOR CONFIGURATION
+
+Splunk’s current documentation says the Universal Forwarder can run on Windows 11 ARM under Prism x64 emulation only on a best-effort basis, and specifically says Windows Event Log collection is unsupported/not validated in that configuration. Since Sysmon Event Logs are the foundation of this project, I don’t want us building on an unreliable ingestion method
+
+Splunk Open Telementry Ingester - Supports Windoes 11 - ARM 64
+
+
+Splunk token creation and HTTP Event Collector
+
+
+
+<img width="805" height="582" alt="Screenshot 2026-09-06 at 3 10 09 PM" src="https://github.com/user-attachments/assets/8abd62ed-a860-43a0-b00b-9b773f557f45" />
+
+
+
+<img width="662" height="259" alt="Screenshot 2026-09-06 at 3 09 07 PM" src="https://github.com/user-attachments/assets/69d3aea5-34a8-4886-98f8-e52a8626709e" />
+
+Created the Authorization Token for the Collector to verify identity and ingest the sysmon logs.
+
+<img width="760" height="117" alt="Screenshot 2026-09-06 at 3 21 38 PM" src="https://github.com/user-attachments/assets/00495f27-ec9a-49e4-8fba-62f403a2fc24" />
+
+
+HTTP Splunk Collection Successful:
+
+____
+
+<img width="426" height="176" alt="Screenshot 2026-09-06 at 3 34 22 PM" src="https://github.com/user-attachments/assets/f3e45e2a-8325-456d-bca5-25158c124543" />
+
+
+<img width="475" height="263" alt="Screenshot 2026-09-06 at 3 33 57 PM" src="https://github.com/user-attachments/assets/617fefa4-40fd-4733-b03a-9022de8e94ef" />
+
+
+<img width="1170" height="520" alt="Screenshot 2026-09-06 at 3 32 54 PM" src="https://github.com/user-attachments/assets/590128e9-698e-47ce-983b-699640d8e22e" />
+
+
+
+Testing Splunk Ingestion from Windows Powershell initiated NetConnection and notepad execution:
+
+_____
+
+<img width="864" height="456" alt="Screenshot 2026-09-06 at 6 18 13 PM" src="https://github.com/user-attachments/assets/a09af5be-43fc-45b8-9edc-5be5f2aa630b" />
+
+
+Copying audit.yaml open telementry configuration for backup
+
+____
+
+<img width="1164" height="112" alt="Screenshot 2026-09-07 at 4 09 38 PM" src="https://github.com/user-attachments/assets/dabb64b4-7c51-4fd1-9725-d6d9521b5ed4" />
+
+____
+
+Enabling script blocking from Powershell to tell us what powershell actually executed.
+
+___
+<img width="1151" height="280" alt="Screenshot 2026-09-07 at 4 13 07 PM" src="https://github.com/user-attachments/assets/b75effe2-6610-4221-923c-d5f1dc4327c9" />
+
+
+Updated the agent configuration to send windows security logs 
+
+<img width="844" height="510" alt="Screenshot 2026-09-07 at 4 26 10 PM" src="https://github.com/user-attachments/assets/d4808a75-d17d-4c06-9ad0-199fbe4de162" />
+
+
+Validated configuration of the agent yaml file
+
+<img width="1186" height="201" alt="Screenshot 2026-09-07 at 4 27 26 PM" src="https://github.com/user-attachments/assets/de2d7ad9-37e6-4ed0-83c6-cad3e8b0d13c" />
+
+___
+
+Creating a Powershell Event to Test Ingestion
+
+___
+
+
+<img width="1192" height="241" alt="Screenshot 2026-09-07 at 5 16 59 PM" src="https://github.com/user-attachments/assets/593f69ae-e3c1-4e07-93f2-7436970638e4" />
+
+
+
+Confirming Windows Powershell Events are reaching Splunk Recieving Host
+
+<img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
