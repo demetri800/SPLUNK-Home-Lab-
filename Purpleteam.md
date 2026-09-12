@@ -270,3 +270,6 @@ ___
 Confirming Windows Powershell Events are reaching Splunk Recieving Host
 
 <img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
+
+
+
