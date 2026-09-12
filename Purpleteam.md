@@ -271,5 +271,14 @@ Confirming Windows Powershell Events are reaching Splunk Recieving Host
 
 <img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
 
+ ## Stage 4: Building the baseline for normal activity: Understanding what legitiamte activity looks like 
+ 
+Understand normal behavior → introduce adversary behavior → identify meaningful differences → build detection logic around those differences. 
+
+___
+<img width="1280" height="365" alt="Screenshot 2026-09-12 at 8 59 23 AM" src="https://github.com/user-attachments/assets/065b3e0b-7a10-4922-a4b7-b28e3250e41a" />
+
+
+
 
 
