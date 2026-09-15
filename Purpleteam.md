@@ -278,6 +278,58 @@ Understand normal behavior → introduce adversary behavior → identify meaning
 ___
 <img width="1280" height="365" alt="Screenshot 2026-09-12 at 8 59 23 AM" src="https://github.com/user-attachments/assets/065b3e0b-7a10-4922-a4b7-b28e3250e41a" />
 
+Configured the agent YAML file and changed the index purple_team_lab because the windows_lab index was occupied from a past project.
+
+<img width="845" height="513" alt="Screenshot 2026-09-12 at 10 06 26 AM" src="https://github.com/user-attachments/assets/32ea9b70-b835-49cc-a466-7a0bb3d7a3b6" />
+
+___
+
+Edited the HTTP Event Collector and reassigned the index so the token would validate after initial failure
+
+<img width="1096" height="352" alt="Screenshot 2026-09-12 at 10 22 30 AM" src="https://github.com/user-attachments/assets/f3e96e9d-ea80-4bc5-940d-dafd5eee9021" />
+
+
+<img width="1427" height="276" alt="Screenshot 2026-09-12 at 10 21 12 AM" src="https://github.com/user-attachments/assets/96f6074c-c1ee-4c38-9d74-38c5e9e55657" />
+
+Fixed: 
+
+<img width="1101" height="180" alt="Screenshot 2026-09-12 at 10 23 03 AM" src="https://github.com/user-attachments/assets/4f83d632-ae1a-4ace-87b1-6e1b39c118ed" />
+
+
+Confirmation from Splunk that it ingested the test event successfully 
+
+<img width="1374" height="617" alt="Screenshot 2026-09-12 at 10 33 56 AM" src="https://github.com/user-attachments/assets/bbdbc892-7dd1-4725-a997-f97a5c62c6b9" />
+
+Creating a normal baseline
+
+<img width="758" height="586" alt="Screenshot 2026-09-12 at 11 24 53 AM" src="https://github.com/user-attachments/assets/a6b1b81c-3a95-4283-865c-35a7c86af0a4" />
+
+
+Chain Process for Notepad.exe:
+
+<img width="1002" height="228" alt="Screenshot 2026-09-12 at 11 50 17 AM" src="https://github.com/user-attachments/assets/5f291127-693e-4e97-9bbc-78f0c769c72a" />
+
+Chain Process for cmd.exe parent process correlation to whomai.exe 
+
+Powershell.exe -> cmd.exe -> whoami.exe
+
+Process ID cmd.exe = 0x2344 corresponds with the event details found in the whoami.exe process
+
+<img width="913" height="177" alt="Screenshot 2026-09-12 at 12 02 14 PM" src="https://github.com/user-attachments/assets/143e5f5a-b55a-40b9-ae21-60f9a688b69c" />
+
+<img width="692" height="181" alt="Screenshot 2026-09-12 at 12 04 18 PM" src="https://github.com/user-attachments/assets/131c83fb-352c-4bfc-95ab-03662187648d" />
+
+
+Correlating DNS Query and Test Connection 
+
+____
+<img width="720" height="417" alt="Screenshot 2026-09-12 at 12 45 11 PM" src="https://github.com/user-attachments/assets/624f042a-8326-42f2-a0cf-88d57bf244d9" />
+
+____
+
+<img width="923" height="211" alt="Screenshot 2026-09-12 at 12 45 58 PM" src="https://github.com/user-attachments/assets/91341bcf-76bd-4198-aac6-7a0c2a5968c5" />
+
+
 
 
 
