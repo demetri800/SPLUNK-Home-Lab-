@@ -330,7 +330,111 @@ ____
 <img width="923" height="211" alt="Screenshot 2026-09-12 at 12 45 58 PM" src="https://github.com/user-attachments/assets/91341bcf-76bd-4198-aac6-7a0c2a5968c5" />
 
 
+Beginning phase of establishing baseline events in splunk before replacing _raw with cleaner fields
 
+<img width="1440" height="674" alt="Screenshot 2026-09-15 at 6 25 17 PM" src="https://github.com/user-attachments/assets/1846f038-e218-4a24-aa23-dada30fb15b3" />
+
+_____
+
+Normal Activity Documentation:
+
+Command execution: Notepad.exe - 
+
+Parent Image/Process - powershell.exe
+
+Suspicious: NO 
+
+Manually launched from powershell
+
+
+Telemetry:
+Sysmon Event ID 1
+Security Event ID 4688
+
+
+PowerShell HTTPS Test
+
+Command:
+Test-NetConnection 
+domain: example.com -Port 443
+
+Suspicious:
+No
+
+Telemetry:
+PowerShell 4104
+Sysmon DNS Event 22
+Sysmon Network Event 3
+
+___
+
+
+Indentifiers for correlating processes:
+
+PID
+= useful locally and short-term
+
+ProcessGuid
+= stronger correlation identifier
+
+Parent PID / ParentProcessGuid
+= immediate parent
+
+Repeated correlation
+= full ancestry / process tree
+
+
+Main goal is converting raw events to: 
+
+PowerShell
+   ↓
+CMD
+   ↓
+whoami
+
+Rather than investigating every process event separately.
+
+And this is precisely why we baseline process trees before Atomic Red Team: After I start the attacks, I , should already understand understand how to answer, “what actually initiated this process?” rather than stopping at the immediate parent.
+
+
+
+## STAGE 5 - Atomic Red Team Installation and ATTACK SIM 
+
+Objective: 
+
+Select ATT&CK technique
+        ↓
+Understand the Atomic test
+        ↓
+Execute it on WIN-VICTIM01
+        ↓
+Sysmon / Security / PowerShell record it
+        ↓
+Splunk receives it
+        ↓
+Compare it against your Stage 4 baseline
+
+Installed Atmomic Red Team and verified installation
+<img width="1091" height="454" alt="Screenshot 2026-09-15 at 8 01 59 PM" src="https://github.com/user-attachments/assets/7ca673c9-be09-4f50-be2d-d7e7a247ef84" />
+
+_____
+
+<img width="1022" height="185" alt="Screenshot 2026-09-15 at 8 03 00 PM" src="https://github.com/user-attachments/assets/efe806f7-7490-40db-a821-59afb1a38d9f" />
+
+__
+
+Atomic Red Team organizes test by MITRE ATTACK technique 
+
+Attack technique #1:
+
+T1059.001
+Command and Scripting Interpreter: PowerShell
+
+___
+
+Problems: Unable to find the attack technique definition in the Atomics Folder, required reinstallation of the 
+
+<img width="1115" height="372" alt="Screenshot 2026-09-15 at 8 41 04 PM" src="https://github.com/user-attachments/assets/d5778d51-0694-40b6-9af8-832f6f3f999d" />
 
 
 
