@@ -432,9 +432,20 @@ Command and Scripting Interpreter: PowerShell
 
 ___
 
-Problems: Unable to find the attack technique definition in the Atomics Folder, required reinstallation of the 
+Problems: Atomics reporsitory was present but I was unable to find the attack technique definition in the Atomics Folder, required reinstallation of the Atomics Techniques Folder 
+
+
+<img width="810" height="114" alt="Screenshot 2026-09-15 at 8 44 08 PM" src="https://github.com/user-attachments/assets/d2fd1171-cced-4cbc-baf1-cb39927a5a5d" />
+____
+
 
 <img width="1115" height="372" alt="Screenshot 2026-09-15 at 8 41 04 PM" src="https://github.com/user-attachments/assets/d5778d51-0694-40b6-9af8-832f6f3f999d" />
+
+____
+
+File was removed again and quarantined by the Windows Security Defender. This prevented me from maintaining the T1059.001 MITRE ATTACK file in the Atomics Folder which I needed to conduct the test. 
+
+<img width="804" height="640" alt="Screenshot 2026-09-18 at 12 13 27 PM" src="https://github.com/user-attachments/assets/a68b91ca-a28d-4934-bc84-efbaca3003f4" />
 
 
 
