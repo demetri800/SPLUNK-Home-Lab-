@@ -470,34 +470,39 @@ ___
 Inspected test 17 and verified prerequisites
 <img width="1115" height="541" alt="Screenshot 2026-09-18 at 1 07 45 PM" src="https://github.com/user-attachments/assets/cb079294-7f43-45fa-adb4-7a506c937fdf" />
 
-
-
-
-
 Logged the date and time prior to execution of the attack. 
 
 
 
-Investigating powershell activity from splunk otel collector ingestion and identified the process chain from the executed:
+Investigating powershell activity from splunk otel collector ingestion...
+
+Process Chain:
 
 
 Parent Process: powershell.exe {520a07f6-6b70-6aa5-b100-000000000d00}
 
-|
+                                           ⬇️
 
-Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} 
+Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} - this execution launches both conhost and the powershell encoded command 
+                  |_________________________________________________________|
 
-|
-
-Parent Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} - this execution launches both conhost and the powershell encoded command 
-
-|
+                  ⬇️                                                         ⬇️          
 
 
-Process GUID: conhost.exe: {520a07f6-70b0-6aad-fb0a-000000000d00} - normal supporting process content console window host created by cmd.exe, provides the console interface for command line programs (cmd). 
+                     
+Parent Image: conhost.exe:                                             Parent Image: powershell.exe 
+Process GUID: {520a07f6-70b0-6aad-fb0a-000000000d00}:                  Process GUID: {520a07f6-70b0-6aad-fc0a-000000000d00}
+Normal supporting process content console window host created   →       Command line: powershell.exe -e encoded powershell 
+by cmd.exe, provides the console interface for command line            suspicious branch of the process tree
+programs (cmd).                                                                                                                                   
 
-Process GUID: powershell.exe {520a07f6-70b0-6aad-fc0a-000000000d00} - Command line: powershell.exe -e encoded powershell command - suspicious branch of the process tree
 
+Analysis chain:
+
+
+Base 64 Encoded powershell: JgAgACgAZwBjAG0AIAAoACcAaQBlAHsAMAB9ACcAIAAtAGYAIAAnAHgAJwApACkAIAAoACIAVwByACIAKwAiAGkAdAAiACsAIgBlAC0ASAAiACsAIgBvAHMAdAAgACcASAAiACsAIgBlAGwAIgArACIAbABvACwAIABmAHIAIgArACIAbwBtACAAUAAiACsAIgBvAHcAIgArACIAZQByAFMAIgArACIAaAAiACsAIgBlAGwAbAAhACcAIgApAA==
+
+Decoded: & (gcm ('ie{0}' -f 'x')) ("Wr"+"it"+"e-H"+"ost 'H"+"el"+"lo, fr"+"om P"+"ow"+"erS"+"h"+"ell!'")
 
 <img width="1170" height="545" alt="Screenshot 2026-09-19 at 11 27 01 AM" src="https://github.com/user-attachments/assets/91a3f05d-19e3-4aca-98cd-d4667c45a0c7" />
 
@@ -522,6 +527,21 @@ SPL Query: index=purple_team_lab "powershell.exe" "4688" "cmd.exe"
 ____
 
 
-Because this is a lab simulation, I know what the decoded scriptblock is. So the SPL search can be, "Hello from Powershell". In real SOC investigations, the search is narrowed by including fields such as host, timestamp, and powershell event type (4104). At this point I can determine what PowerShell script blocks were recorded immediately after this suspicious PowerShell process started. 
+Since this is a simulation, I already know what the decoded scriptblock is. So the SPL search can be, "Hello from Powershell". In real SOC investigations, the search is narrowed by including fields such as host, timestamp, and powershell event type (4104). At this point, I can determine what PowerShell script blocks were recorded immediately after this suspicious PowerShell process started. 
+
+SPL Search: index=purple_team_lab "Microsoft-Windows-Powershell/Operational" "4104" computer="WIN-VICTIM01" earliest="09/18/2026:13:11:15:000" latest="09/18/2026:13:11:18:000"
+
+<img width="979" height="572" alt="Screenshot 2026-09-19 at 1 55 19 PM" src="https://github.com/user-attachments/assets/cbc52016-f05a-40a6-a526-c25da743eed9" />
+
+Snapshot matches the decoded powershell result: & (gcm ('ie{0}' -f 'x')) ("Wr"+"it"+"e-H"+"ost 'H"+"el"+"lo, fr"+"om P"+"ow"+"erS"+"h"+"ell!'")
+
+____
+
+Conclusion: 
+
+For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTACK TECHNIQUE, which exploits the Windows powershell native tool by execute commands and scripts. The investigation was conducted by first examing the sysmon events from Splunk ingestion. From there, I queried the search for process creation events occurring around that time-frame of the initiated attack. 
+
+
+
 
 
