@@ -539,9 +539,7 @@ ____
 
 Conclusion: 
 
-For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTACK TECHNIQUE, which exploits the Windows powershell native tool by execute commands and scripts. The investigation was conducted by first examing the sysmon events from Splunk ingestion. From there, I queried the search for process creation events occurring around that time-frame of the initiated attack. 
-
-
+For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTACK TECHNIQUE, which exploits the Windows powershell native tool by execute commands and scripts. The investigation was conducted by first examining the sysmon events from Splunk ingestion. From there, I queried the search for process creation events occurring around the time-frame of the attack. Based on the results, I discovered an event with details showing command terminal launching an encoded powershell process. To further analyze, I constructed a process chain by correlating those events with their GUIDs and parent-child process relationships.  With this information, I was able to accurately  determine that powershell.exe was the parent process of the cmd.exe, at which point cmd.exe then launched conhost.exe and powershell.exe -e. To identify the content of the encoded script, I copied the encoded text from the command line details from the event and decoded with an online base 64 decoding tool, phoenix code. For my next step, I conducted cross source validation against both the sysmon and the 4688 Windows Security Event. In my query I included the time, host, and event id 4104. The results revealed powershell event that contained the scriptblock text, "Hello, from Powershell". 
 
 
 
