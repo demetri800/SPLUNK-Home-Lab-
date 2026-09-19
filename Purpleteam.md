@@ -485,19 +485,43 @@ Parent Process: powershell.exe {520a07f6-6b70-6aa5-b100-000000000d00}
 
 |
 
-Process GUID: cmd.exe /c powershell.exe -e {520a07f6-70af-6aad-fa0a-000000000d00} 
+Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} 
 
 |
 
-Process GUID: conhost.exe: {520a07f6-70b0-6aad-fb0a-000000000d00} - console window host created by cmd.exe, provides the console interface for command line programs (cmd). 
+Parent Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} - this execution launches both conhost and the powershell encoded command 
 
 |
 
-Process GUID: powershell.exe {520a07f6-70b0-6aad-fc0a-000000000d00} - encoded powershell command - suspicious branch of the process tree
+
+Process GUID: conhost.exe: {520a07f6-70b0-6aad-fb0a-000000000d00} - normal supporting process content console window host created by cmd.exe, provides the console interface for command line programs (cmd). 
+
+Process GUID: powershell.exe {520a07f6-70b0-6aad-fc0a-000000000d00} - Command line: powershell.exe -e encoded powershell command - suspicious branch of the process tree
 
 
+<img width="1170" height="545" alt="Screenshot 2026-09-19 at 11 27 01 AM" src="https://github.com/user-attachments/assets/91a3f05d-19e3-4aca-98cd-d4667c45a0c7" />
 
 
+<img width="1168" height="587" alt="Screenshot 2026-09-19 at 11 28 20 AM" src="https://github.com/user-attachments/assets/563fdcc8-e20a-4484-8dc3-420f6f6d9561" />
 
+
+<img width="1132" height="546" alt="Screenshot 2026-09-19 at 11 29 39 AM" src="https://github.com/user-attachments/assets/897ec2f2-65bc-48af-a330-3601c7af216e" />
+
+Conducted Cross source validation to correlate the sysmon with the 4688 windows security event. 
+
+
+The snapshots below reveal how the powershell parent process launched the cmd.exe prior to the encoded powershell executable from  cmd.exe
+
+SPL Query: index=purple_team_lab "powershell.exe" "4688" "cmd.exe"
+
+<img width="1353" height="605" alt="Screenshot 2026-09-19 at 12 12 20 PM" src="https://github.com/user-attachments/assets/4eb3fefa-eecf-4b38-b466-b6356c61cac7" />
+
+<img width="1367" height="620" alt="Screenshot 2026-09-19 at 12 12 40 PM" src="https://github.com/user-attachments/assets/42571ed2-5772-4b0b-98fc-2a440472706b" />
+
+
+____
+
+
+Because this is a lab simulation, I know what the decoded scriptblock is. So the SPL search can be, "Hello from Powershell". In real SOC investigations, the search is narrowed by including fields such as host, timestamp, and powershell event type (4104). At this point I can determine what PowerShell script blocks were recorded immediately after this suspicious PowerShell process started. 
 
 
