@@ -443,9 +443,61 @@ ____
 
 ____
 
-File was removed again and quarantined by the Windows Security Defender. This prevented me from maintaining the T1059.001 MITRE ATTACK file in the Atomics Folder which I needed to conduct the test. 
+File was removed again and quarantined by the Windows Security Defender. This prevented me from maintaining the T1059.001 MITRE ATTACK file in the Atomics Folder which I needed to conduct the test. I restored the threat from Windows Security to prevent continuous blocking.
 
 <img width="804" height="640" alt="Screenshot 2026-09-18 at 12 13 27 PM" src="https://github.com/user-attachments/assets/a68b91ca-a28d-4934-bc84-efbaca3003f4" />
+
+____
+
+BAsed on the output the T1059.001.yaml already exists, but Microsoft Defender is blocking PowerShell from reading it. So I had to apply a temporary exclusion for this technique folder. 
+
+<img width="2048" height="431" alt="Screenshot 2026-09-18 at 12 24 54 PM" src="https://github.com/user-attachments/assets/36a68142-7d03-457e-81d5-6caaa863d21a" />
+
+Microsoft documents Add-MpPreference -ExclusionPath as excluding the specified file or folder from Defender's scheduled and real-time scanning. 
+
+Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot I successfully accessed the details from the T1059.001 definition. 
+
+___
+
+<img width="1156" height="446" alt="Screenshot 2026-09-18 at 12 40 33 PM" src="https://github.com/user-attachments/assets/caa4567c-22af-463f-a1e7-96b967f19228" />
+
+____
+
+<img width="1113" height="464" alt="Screenshot 2026-09-18 at 12 44 33 PM" src="https://github.com/user-attachments/assets/ad15955c-663b-4ecb-a3a2-975b78d039dd" />
+
+___
+
+Inspected test 17 and verified prerequisites
+<img width="1115" height="541" alt="Screenshot 2026-09-18 at 1 07 45 PM" src="https://github.com/user-attachments/assets/cb079294-7f43-45fa-adb4-7a506c937fdf" />
+
+
+
+
+
+Logged the date and time prior to execution of the attack. 
+
+
+
+Investigating powershell activity from splunk otel collector ingestion and identified the process chain from the executed:
+
+
+Parent Process: powershell.exe {520a07f6-6b70-6aa5-b100-000000000d00}
+
+|
+
+Process GUID: cmd.exe /c powershell.exe -e {520a07f6-70af-6aad-fa0a-000000000d00} 
+
+|
+
+Process GUID: conhost.exe: {520a07f6-70b0-6aad-fb0a-000000000d00} - console window host created by cmd.exe, provides the console interface for command line programs (cmd). 
+
+|
+
+Process GUID: powershell.exe {520a07f6-70b0-6aad-fc0a-000000000d00} - encoded powershell command - suspicious branch of the process tree
+
+
+
+
 
 
 
