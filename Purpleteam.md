@@ -539,7 +539,39 @@ ____
 
 Conclusion: 
 
-For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTACK TECHNIQUE, which exploits the Windows powershell native tool by execute commands and scripts. The investigation was conducted by first examining the sysmon events from Splunk ingestion. From there, I queried the search for process creation events occurring around the time-frame of the attack. Based on the results, I discovered an event with details showing command terminal launching an encoded powershell process. To further analyze, I constructed a process chain by correlating those events with their GUIDs and parent-child process relationships.  With this information, I was able to accurately  determine that powershell.exe was the parent process of the cmd.exe, at which point cmd.exe then launched conhost.exe and powershell.exe -e. To identify the content of the encoded script, I copied the encoded text from the command line details from the event and decoded with an online base 64 decoding tool, phoenix code. For my next step, I conducted cross source validation against both the sysmon and the 4688 Windows Security Event. In my query I included the time, host, and event id 4104. The results revealed powershell event that contained the scriptblock text, "Hello, from Powershell". 
+For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTACK TECHNIQUE, which exploits the Windows powershell native tool by executing commands and scripts. The investigation was conducted by first examining the sysmon events from Splunk ingestion. From there I queried the search for process creation events, occurring around the time-frame of the attack. Based on the results, I discovered an event with details showing command terminal launching an encoded powershell process. To further analyze, I constructed a process chain by correlating those events with their GUIDs and parent-child process relationships.  With this information, I was able to accurately  determine that powershell.exe was the parent process of the cmd.exe, at which point cmd.exe then launched conhost.exe and powershell.exe -e. To identify the content of the encoded script, I copied its text from the event command line details and decoded it with an online base 64 tool, phoenix code. For my next step, I conducted cross source validation against both the sysmon and the 4688 Windows Security Event telemetry to assess detection resilience and confirm reliability. The final step was to examine the powershell encoded process from the splunk events. In my query I included the time, host, and event id 4104. The results revealed a powershell event that contained the scriptblock text, "Hello, from Powershell". The evidence matched the previously decoded result of the powershell. This phase of the project demonstrated how multiple telemetry sources can be correlated to reconstruct suspicious PowerShell execution.
 
+
+## STAGE 6: DETECTION ENGINEERING
+
+Objective: Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
+
+Identifying the extracted field names from SPLUNK: 
+
+The event_data field was used to build the detection rules and organize the elements in table format.
+
+event_data
+ ├── Image
+ ├── CommandLine
+ ├── ProcessGuid
+ ├── ProcessId
+ ├── ParentImage
+ ├── ParentCommandLine
+ ├── ParentProcessGuid
+ ├── ParentProcessId
+ └── User
+
+ 
+<img width="1127" height="249" alt="Screenshot 2026-09-21 at 6 22 40 PM" src="https://github.com/user-attachments/assets/86db899f-b984-4fc4-a982-02bfaea8e429" />
+
+
+SPL rule detects a process creation logged by sysmon that matches the commandLine of a powershell encoding and all of its extended variations. However since powershell allows abbreviation usage for parameter names, only searching for powershell -e is not sufficient.
+
+<img width="1417" height="603" alt="Screenshot 2026-09-21 at 6 24 13 PM" src="https://github.com/user-attachments/assets/295b9d94-785d-45f0-aca8-092c77f8dd8a" />
+
+
+
+
+<img width="1427" height="571" alt="Screenshot 2026-09-21 at 6 35 11 PM" src="https://github.com/user-attachments/assets/576b4fbc-c113-444d-8945-dfdd9bcbcbf0" />
 
 
