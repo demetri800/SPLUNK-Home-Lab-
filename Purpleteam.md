@@ -570,8 +570,16 @@ SPL rule detects a process creation logged by sysmon that matches the commandLin
 <img width="1417" height="603" alt="Screenshot 2026-09-21 at 6 24 13 PM" src="https://github.com/user-attachments/assets/295b9d94-785d-45f0-aca8-092c77f8dd8a" />
 
 
+Re-running Atomic Red to test newly configured detection rule with timestamp
+<img width="1110" height="521" alt="Screenshot 2026-09-21 at 6 36 36 PM" src="https://github.com/user-attachments/assets/08d9c0da-45ee-43bc-91d2-ef7bca3cb33f" />
 
+The SPL rule successfully detected the encoded powershell process including significant fields.
 
 <img width="1427" height="571" alt="Screenshot 2026-09-21 at 6 35 11 PM" src="https://github.com/user-attachments/assets/576b4fbc-c113-444d-8945-dfdd9bcbcbf0" />
 
+<img width="830" height="321" alt="Screenshot 2026-09-21 at 6 55 46 PM" src="https://github.com/user-attachments/assets/d27aaedd-6d40-4a7c-a0c8-4068dfec1a80" />
+
+Testing for detection rule for false positives by initiating a Write-Ouput process. 
+
+<img width="739" height="74" alt="Screenshot 2026-09-21 at 6 56 08 PM" src="https://github.com/user-attachments/assets/52079124-82d8-4f44-9938-4a6639aa9ee9" />
 
