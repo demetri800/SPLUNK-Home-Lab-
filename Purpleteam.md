@@ -546,7 +546,7 @@ For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTA
 
 Objective: Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
 
-Identifying the extracted field names from SPLUNK: 
+Step #1; Identifying the extracted field names from SPLUNK: 
 
 The event_data field was used to build the detection rules and organize the elements in table format.
 
@@ -565,13 +565,19 @@ event_data
 <img width="1127" height="249" alt="Screenshot 2026-09-21 at 6 22 40 PM" src="https://github.com/user-attachments/assets/86db899f-b984-4fc4-a982-02bfaea8e429" />
 
 
+Step #2: Writing an SPL Detection
+
 SPL rule detects a process creation logged by sysmon that matches the commandLine of a powershell encoding and all of its extended variations. However since powershell allows abbreviation usage for parameter names, only searching for powershell -e is not sufficient.
 
 <img width="1417" height="603" alt="Screenshot 2026-09-21 at 6 24 13 PM" src="https://github.com/user-attachments/assets/295b9d94-785d-45f0-aca8-092c77f8dd8a" />
 
 
+Step #3: Rerunning adversary simulation
+
 Re-running Atomic Red to test newly configured detection rule with timestamp
 <img width="1110" height="521" alt="Screenshot 2026-09-21 at 6 36 36 PM" src="https://github.com/user-attachments/assets/08d9c0da-45ee-43bc-91d2-ef7bca3cb33f" />
+
+Step #4: detection automatically identifies the new execution.
 
 The SPL rule successfully detected the encoded powershell process including significant fields.
 
@@ -579,7 +585,28 @@ The SPL rule successfully detected the encoded powershell process including sign
 
 <img width="830" height="321" alt="Screenshot 2026-09-21 at 6 55 46 PM" src="https://github.com/user-attachments/assets/d27aaedd-6d40-4a7c-a0c8-4068dfec1a80" />
 
-Testing for detection rule for false positives by initiating a Write-Ouput process. 
 
-<img width="739" height="74" alt="Screenshot 2026-09-21 at 6 56 08 PM" src="https://github.com/user-attachments/assets/52079124-82d8-4f44-9938-4a6639aa9ee9" />
+Step #5: Generating harmless powershell activity
+
+Testing for detection rule for false positives by initiating a Write-Ouput process. I performed this by generating benign PowerShell activity. The benign activity did not match.
+
+<img width="912" height="220" alt="Screenshot 2026-09-22 at 10 17 08 PM" src="https://github.com/user-attachments/assets/16e3ec05-7b62-40e0-b213-4e7bcf350372" />
+
+
+<img width="761" height="71" alt="Screenshot 2026-09-22 at 10 17 23 PM" src="https://github.com/user-attachments/assets/210254b9-4b7d-4be0-b3d9-531619000864" />
+
+
+<img width="1418" height="520" alt="Screenshot 2026-09-22 at 10 18 00 PM" src="https://github.com/user-attachments/assets/6ab2d0b6-7e53-4097-af87-bf44800be41b" />
+
+____
+
+
+Validating detection configuration by using paramter variations of encoded powershell.
+
+<img width="1120" height="220" alt="Screenshot 2026-09-22 at 10 58 36 PM" src="https://github.com/user-attachments/assets/1ec98860-01d1-4116-b12a-1d1d5b5a4a50" />
+
+
+
+<img width="1435" height="695" alt="Screenshot 2026-09-22 at 10 57 34 PM" src="https://github.com/user-attachments/assets/dfbc9b9e-29ef-4f52-987f-2d51d5e160b3" />
+
 
