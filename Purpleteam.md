@@ -609,4 +609,181 @@ Validating detection configuration by using paramter variations of encoded power
 
 <img width="1435" height="695" alt="Screenshot 2026-09-22 at 10 57 34 PM" src="https://github.com/user-attachments/assets/dfbc9b9e-29ef-4f52-987f-2d51d5e160b3" />
 
+____
+
+Sysmon used to detect the suspicious process → Powershell 4104 reveals the powershell script being executed
+
+Conducting cross-checking on Windows Powershell Events 
+
+<img width="905" height="171" alt="Screenshot 2026-09-23 at 7 25 39 PM" src="https://github.com/user-attachments/assets/04c83684-e9c8-499a-80ea-84600571aafe" />
+
+
+<img width="974" height="115" alt="Screenshot 2026-09-23 at 7 19 11 PM" src="https://github.com/user-attachments/assets/ed132fa7-1ef8-4221-bd37-0acac570006f" />
+
+<img width="739" height="113" alt="Screenshot 2026-09-23 at 7 23 43 PM" src="https://github.com/user-attachments/assets/61f103f3-78d9-464b-9e86-0ee1dc442f77" />
+
+Improving Detection by impplementing Parent Process Context 
+
+My goal is the let the alert show the parent but not only limited to cmd.exe in the previous example because endcoded powershell can be launched by something else.
+
+This add-on allows the me to detect processes initiated by various parent images that could also potentially star-up powershell scripts, other than cmd.exe. 
+
+
+<img width="1026" height="425" alt="Screenshot 2026-09-23 at 7 43 15 PM" src="https://github.com/user-attachments/assets/5fa953bc-7106-4b6a-aea2-3fa07ab819ed" />
+
+
+<img width="1415" height="90" alt="Screenshot 2026-09-23 at 7 58 18 PM" src="https://github.com/user-attachments/assets/6a7d4d19-9b49-4711-ae0f-80f3b05f4d83" />
+
+
+
+A useful detection explains what it detects, why it matters, how it was tested, and how an analyst should investigate it.
+
+<img width="787" height="208" alt="Screenshot 2026-09-23 at 8 09 24 PM" src="https://github.com/user-attachments/assets/f5f00c6c-f7ac-44c4-ad29-f5bd64ba742c" />
+
+<img width="566" height="68" alt="Screenshot 2026-09-23 at 8 09 47 PM" src="https://github.com/user-attachments/assets/2d51f818-ea4e-419e-86df-f1deb9db8ead" />
+
+Detection Name:
+Encoded PowerShell Execution
+
+MITRE ATT&CK:
+T1059.001 — PowerShell
+
+Data Source:
+Sysmon Event ID 1
+
+Objective:
+Identify PowerShell processes launched with encoded-command
+arguments.
+
+Detection Logic:
+Identify powershell.exe process creation events where the
+command line contains variations of -EncodedCommand such as
+-e, -enc, or -EncodedCommand.
+
+Primary Fields:
+Image
+CommandLine
+ParentImage
+ParentCommandLine
+User
+ProcessGuid
+ParentProcessGuid
+
+Validation:
+Atomic Red Team T1059.001 Test #17
+
+Result:
+Successfully detected Atomic execution.
+
+Negative Testing:
+Normal PowerShell commands such as Get-Date and Get-Process
+did not trigger the detection.
+
+** Potential False Positives **
+Legitimate administrative automation or management software
+that uses encoded PowerShell.
+
+Investigation Guidance:
+Review parent process, user, host, decoded command content,
+PowerShell 4104 telemetry, and subsequent process/network
+activity.
+
+Detection Status:
+Validated
+
+
+## STAGE 7: REGISTRY RUN-KEY PERSISTANCE 
+
+Objective: Simulate a persistence mechanism where an attacker places a command or executable path in a Windows autorun registry location so it can execute when the user logs on. Atomic Red Team currently lists Test #1, “Reg Key Run,” which adds an Atomic Red Team value under the current user's Run key and provides a cleanup command afterward
+
+
+Step #1: Verfiy Sysmon registry event collection 
+
+Event 12: registry key/value create or delete
+Event 13: registry value set
+Event 14: registry key/value rename
+
+
+Appending registry event collection to the sysmon.xml file
+<img width="637" height="378" alt="Screenshot 2026-09-26 at 11 33 37 AM" src="https://github.com/user-attachments/assets/53ee81bd-4fe7-46c9-b56b-bd84a978644c" />
+
+Confirming registry event appears in the updated configuration 
+<img width="845" height="416" alt="Screenshot 2026-09-26 at 11 35 15 AM" src="https://github.com/user-attachments/assets/1b81cb9d-d6e6-4ed9-849e-fb5ddd7c6a83" />
+
+Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works 
+
+<img width="1113" height="273" alt="Screenshot 2026-09-26 at 11 39 34 AM" src="https://github.com/user-attachments/assets/98930160-771d-4245-a9e6-b62625f6b8cd" />
+
+<img width="1435" height="619" alt="Screenshot 2026-09-26 at 11 50 49 AM" src="https://github.com/user-attachments/assets/b0d3fa93-f910-4d2f-8b8c-a2fa1aec4168" />
+
+
+Key Fields: These particular fields are necessary for building the process trees for registry specific event 
+
+Image
+    What program modified the registry?
+
+TargetObject
+    What registry key/value was changed?
+
+Details
+    What data was written?
+
+ProcessGuid
+    Which exact process performed it?
+
+User
+    Which account performed it?
+
+
+
+
+<img width="1430" height="637" alt="Screenshot 2026-09-26 at 12 28 01 PM" src="https://github.com/user-attachments/assets/f9c8beca-fcaf-45e5-86c9-89b0367aa6f0" />
+
+Atomic Red MITRE ATTACK T1547.001 was performed, logged by Sysmon, and ingested into SPLUNK. 
+
+<img width="1413" height="539" alt="Screenshot 2026-09-26 at 12 51 41 PM" src="https://github.com/user-attachments/assets/67939f53-2163-43fe-8e22-4cc90a6ea2fb" />
+
+Process was identified:
+
+reg.exe → modified → HKCU\Software\Microsoft\Windows\CurrentVersion\Run → added "Atomic Red Team" → C:\Path\AtomicRedTeam.exe
+
+Step #8: Correlating Registry back to the process:
+
+Event ID: 1 Sysmon Process creation was recorded with included registry telemetry and process chain details. 
+<img width="1176" height="611" alt="Screenshot 2026-09-26 at 1 31 38 PM" src="https://github.com/user-attachments/assets/4413d680-a751-4a89-a160-21b4e9a4fc1e" />
+
+
+parent process: cmd.exe → reg.exe →  HKCU\Software\Microsoft\Windows\CurrentVersion\Run → C:\Path\AtomicRedTeam.exe
+
+Step #9: Cross-Check validating to the Windows Event 4688 logs
+
+<img width="1142" height="595" alt="Screenshot 2026-09-26 at 1 38 16 PM" src="https://github.com/user-attachments/assets/07815501-2afd-4095-813f-ddcea7a0480f" />
+
+Confirms that the windows event security log also identified and captured the process creation of the registry key modification. 
+
+Step #10: Building real dectection against potentially malicious registry key changes   
+
+<img width="1191" height="344" alt="Screenshot 2026-09-26 at 2 07 48 PM" src="https://github.com/user-attachments/assets/0c6211d1-2c0c-49a5-b402-98a8d17d65c7" />
+
+This detection functions by identifying a high value persistence location being modified. The context provided by the event is used to determine whether the registry change was authorized or not. The goal is for the system to alert based on behavior rather than artifact specific detection. A detection rule that actively seeks for a specific keyword such as "Atomic Red Team" is ineffective, because attackers can label this value anything.  
+
+
+Detection Logic Walkthrough: 
+
+index=purple_team_lab event_id.id=13 → Examine Sysmon 13 events only
+
+| spath path=event_data.Image output=Image
+| spath path=event_data.TargetObject output=TargetObject
+| spath path=event_data.Details output=Details.  
+| spath path=event_data.ProcessGuid output=ProcessGuid
+| spath path=event_data.ProcessId output=ProcessId
+| spath path=event_data.User output=User 
+
+→ extract these keys from the parent object event.data . Take that value and save it into a clean new field. 
+
+| where like(TargetObject,"%CurrentVersion%Run%") → Only keep registry changes where the registry path contains CurrentVersion and later contains Run
+
+
+so the keys are folders that contain the configuration settings of how your devices operating system and applications start and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistance and disable security
+
 
