@@ -765,7 +765,7 @@ Step #10: Building real dectection against potentially malicious registry key ch
 
 <img width="1191" height="344" alt="Screenshot 2026-09-26 at 2 07 48 PM" src="https://github.com/user-attachments/assets/0c6211d1-2c0c-49a5-b402-98a8d17d65c7" />
 
-This detection functions by identifying a high value persistence location being modified. The context provided by the event is used to determine whether the registry change was authorized or not. The goal is for the system to alert based on behavior rather than artifact specific detection. A detection rule that actively seeks for a specific keyword such as "Atomic Red Team" is ineffective, because attackers can label this value anything.  
+This detection functions by identifying a high value persistence location being modified. The context provided by the event is used to  understand why a result may deserve extra attention to be vetted. The goal is for the system to alert based on behavior rather than artifact specific detection. A detection rule that actively seeks for a specific keyword such as "Atomic Red Team" is ineffective, because attackers can label this value anything.  
 
 
 Detection Logic Walkthrough: 
@@ -779,11 +779,25 @@ index=purple_team_lab event_id.id=13 → Examine Sysmon 13 events only
 | spath path=event_data.ProcessId output=ProcessId
 | spath path=event_data.User output=User 
 
-→ extract these keys from the parent object event.data . Take that value and save it into a clean new field. 
+→ extract these keys from the parent object event.data . 
+→ output: Take that value and save it into a clean new field. 
 
 | where like(TargetObject,"%CurrentVersion%Run%") → Only keep registry changes where the registry path contains CurrentVersion and later contains Run
 
 
 so the keys are folders that contain the configuration settings of how your devices operating system and applications start and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistance and disable security
+
+Step #11: Validate
+
+Proves that legitamite software can also run keys and which may create instances of false positives 
+
+<img width="1109" height="98" alt="Screenshot 2026-09-26 at 3 31 11 PM" src="https://github.com/user-attachments/assets/e459304e-e059-4570-9bfe-11903ebf4eaa" />
+
+<img width="1434" height="647" alt="Screenshot 2026-09-26 at 3 30 43 PM" src="https://github.com/user-attachments/assets/1d785338-96af-4605-9ec3-938f95c6e072" />
+
+
+<img width="1170" height="469" alt="Screenshot 2026-09-26 at 4 06 49 PM" src="https://github.com/user-attachments/assets/19708e96-f1fa-456f-ba2c-847a825c9555" />
+
+<img width="1385" height="408" alt="Screenshot 2026-09-26 at 4 07 17 PM" src="https://github.com/user-attachments/assets/8a6d21e0-c97e-40aa-b4df-f116bbb95da5" />
 
 
