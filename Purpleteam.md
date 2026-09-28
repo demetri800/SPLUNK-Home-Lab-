@@ -912,3 +912,42 @@ Name of the scheduled task: T1053_005_OnStartup
 cmd.exe /c calc.exe → scheduled task launches cmd.exe, and cmd.exe is told with /c to run calc.exe and then exit.
 
 
+Step #8
+
+
+Confirmation cross source validation was successful with Sysmon even 1, Windows 4688 and 4968 logsources detected the task creation. 
+
+Sysmon 1
+
+<img width="1151" height="616" alt="Screenshot 2026-09-28 at 11 14 28 AM" src="https://github.com/user-attachments/assets/3c47a165-634b-485a-aa7e-835b27e42dc4" />
+
+
+<img width="1159" height="607" alt="Screenshot 2026-09-28 at 11 15 44 AM" src="https://github.com/user-attachments/assets/c2b4f985-0340-409f-ad5b-1ebd917d51ba" />
+
+
+Windows Security 4688
+
+<img width="1018" height="575" alt="Screenshot 2026-09-28 at 11 11 21 AM" src="https://github.com/user-attachments/assets/0b71cca0-3861-4ad8-be2b-b3e219bdc9a0" />
+
+Windows Security 4698 
+
+<img width="1040" height="562" alt="Screenshot 2026-09-28 at 11 16 49 AM" src="https://github.com/user-attachments/assets/f3260345-8ed2-404b-bf65-eb3d543d0cc2" />
+
+
+
+
+Sysmon 1
+schtasks.exe process creation
+        ↓
+Security 4688
+independent process creation record
+        ↓
+Security 4698
+scheduled task actually created
+        ↓
+TaskContent XML
+reveals trigger + command + principal
+
+
+Step #9:
+
