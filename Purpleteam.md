@@ -938,8 +938,6 @@ Windows Security 4698
 
 <img width="1440" height="591" alt="Screenshot 2026-09-28 at 11 41 15 AM" src="https://github.com/user-attachments/assets/b697b8eb-6faa-4c7f-84ce-1075b0751c8c" />
 
-
-
 Sysmon 1
 schtasks.exe process creation
         ↓
@@ -955,6 +953,8 @@ reveals trigger + command + principal
 
 Step #9: Building Scheduled detection
 
+This is a broader search that detects all task creation events and organizes events in table format
+
 index=purple_team_lab event_id.id=4698
 | spath path=event_data.TaskName output=TaskName
 | spath path=event_data.TaskContent output=TaskContent
@@ -965,6 +965,20 @@ index=purple_team_lab event_id.id=4698
 | eval detection_name="Scheduled Task Creation"
 | eval mitre_technique="T1053.005"
 | table _time host SubjectDomainName SubjectUserName detection_name mitre_technique TaskName TaskContent ClientProcessId ParentProcessId
+
+
+This part is as an extension of the previous query allowing the detection rule to match the task content with keywords such as powershell, cmd, and rundll32. These are among the more common exploitable services that threats typically use when performing task creation attacks to maintain persistence on a victims machine:
+
+| eval context=case(
+    match(TaskContent,"(?i)powershell(\.exe)?"),"PowerShell execution",
+    match(TaskContent,"(?i)cmd(\.exe)?"),"Command shell execution",
+    match(TaskContent,"(?i)mshta(\.exe)?"),"MSHTA execution",
+    match(TaskContent,"(?i)rundll32(\.exe)?"),"Rundll32 execution",
+    match(TaskContent,"(?i)wscript(\.exe)?|cscript(\.exe)?"),"Windows Script Host execution",
+    match(TaskContent,"(?i)\\Temp\\|\\AppData\\|\\Downloads\\"),"User-writable path",
+    true(),"Review task creation"
+)
+| table _time host SubjectDomainName SubjectUserName detection_name mitre_technique context TaskName TaskContent ClientProcessId
 
 
 
