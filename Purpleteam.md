@@ -1006,6 +1006,6 @@ Creating a harmless scheduled task to prove detection rule functionality
 <img width="1119" height="227" alt="Screenshot 2026-09-28 at 12 13 18 PM" src="https://github.com/user-attachments/assets/dd1ed2eb-285c-40d5-b244-358a7d520286" />
 
 
-
+Context fields works as intended and assigns "review task creation" instead of "Command shell execution" or "Powershell Execution". This demonstrates how this detection system can highlight alerts based on contextual classification.e
 <img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
 
