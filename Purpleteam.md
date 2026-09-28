@@ -981,4 +981,31 @@ This part is as an extension of the previous query allowing the detection rule t
 | table _time host SubjectDomainName SubjectUserName detection_name mitre_technique context TaskName TaskContent ClientProcessId
 
 
+SPL Command explained:
+
+| eval taskcontent_lower=lower(TaskContent) → converts all of "TaskContent" into to lowercase.
+
+like(taskcontent_lower,"%cmd.exe%") → Asks the question, does the task content contain cmd.exe anywhere?
+The % characters mean "anything can appear before or after this."
+
+Splunk sees: cmd.exe /c calc.exe 
+
+like(taskcontent_lower,"%cmd.exe%") → CONDITION = TRUE 
+
+THEN:
+
+Splunk assigns → context = Command shell execution
+
+
+
+Step #10: Peforming Negative Testing
+
+
+Creating a harmless scheduled task to prove detection rule functionality
+
+<img width="1119" height="227" alt="Screenshot 2026-09-28 at 12 13 18 PM" src="https://github.com/user-attachments/assets/dd1ed2eb-285c-40d5-b244-358a7d520286" />
+
+
+
+<img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
 
