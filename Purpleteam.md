@@ -1006,6 +1006,58 @@ Creating a harmless scheduled task to prove detection rule functionality
 <img width="1119" height="227" alt="Screenshot 2026-09-28 at 12 13 18 PM" src="https://github.com/user-attachments/assets/dd1ed2eb-285c-40d5-b244-358a7d520286" />
 
 
-Context fields works as intended and assigns "review task creation" instead of "Command shell execution" or "Powershell Execution". This demonstrates how this detection system can highlight alerts based on contextual classification.e
+Context fields works as intended and assigns "review task creation" instead of "Command shell execution" or "Powershell Execution". This demonstrates how this detection system can highlight alerts based on contextual classification.
+
 <img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
+
+
+Validated Atomic and the production of new test events:
+
+<img width="959" height="177" alt="Screenshot 2026-09-28 at 12 54 01 PM" src="https://github.com/user-attachments/assets/8113989b-eae4-4ce1-b644-a93d0b5b78de" />
+
+
+Invoke-AtomicTest T1053.005 -TestNumbers 1
+
+<img width="1117" height="637" alt="Screenshot 2026-09-28 at 12 52 44 PM" src="https://github.com/user-attachments/assets/cc60b46e-e044-4797-895a-c0044b0e21d3" />
+ 
+
+<img width="968" height="181" alt="Screenshot 2026-09-28 at 12 57 42 PM" src="https://github.com/user-attachments/assets/61633c2e-76c7-436d-bcd9-f4121ac872e2" />
+
+{Edit Detection Summary} 
+
+Detection:
+Scheduled Task Creation
+
+MITRE ATT&CK:
+T1053.005 — Scheduled Task
+
+Primary Data Source:
+Windows Security Event 4698
+
+Supporting Sources:
+Sysmon Event ID 1
+Windows Security Event 4688
+
+Detection Objective:
+Identify newly registered scheduled tasks and expose
+their trigger, execution command, account, and creating process.
+
+Validation:
+Atomic Red Team T1053.005 Test #1
+
+Observed behavior:
+schtasks.exe created logon/startup tasks configured
+to execute cmd.exe /c calc.exe.
+
+Potential False Positives:
+Software installers, update agents, administrative
+automation, maintenance jobs, and enterprise management tools.
+
+Investigation:
+Review task name, XML action, arguments, trigger,
+principal, creating account, creating process, and surrounding
+process/network activity.
+
+Kali Network Attack Simulation 
+
 
