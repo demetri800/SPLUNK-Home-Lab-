@@ -929,10 +929,14 @@ Windows Security 4688
 
 <img width="1018" height="575" alt="Screenshot 2026-09-28 at 11 11 21 AM" src="https://github.com/user-attachments/assets/0b71cca0-3861-4ad8-be2b-b3e219bdc9a0" />
 
-Windows Security 4698 
-
 <img width="1040" height="562" alt="Screenshot 2026-09-28 at 11 16 49 AM" src="https://github.com/user-attachments/assets/f3260345-8ed2-404b-bf65-eb3d543d0cc2" />
 
+Windows Security 4698 
+
+
+<img width="1440" height="582" alt="Screenshot 2026-09-28 at 11 40 59 AM" src="https://github.com/user-attachments/assets/07bf03fd-5a95-45fe-86e2-7b6212fc957f" />
+
+<img width="1440" height="591" alt="Screenshot 2026-09-28 at 11 41 15 AM" src="https://github.com/user-attachments/assets/b697b8eb-6faa-4c7f-84ce-1075b0751c8c" />
 
 
 
@@ -949,5 +953,18 @@ TaskContent XML
 reveals trigger + command + principal
 
 
-Step #9:
+Step #9: Building Scheduled detection
+
+index=purple_team_lab event_id.id=4698
+| spath path=event_data.TaskName output=TaskName
+| spath path=event_data.TaskContent output=TaskContent
+| spath path=event_data.SubjectUserName output=SubjectUserName
+| spath path=event_data.SubjectDomainName output=SubjectDomainName
+| spath path=event_data.ClientProcessId output=ClientProcessId
+| spath path=event_data.ParentProcessId output=ParentProcessId
+| eval detection_name="Scheduled Task Creation"
+| eval mitre_technique="T1053.005"
+| table _time host SubjectDomainName SubjectUserName detection_name mitre_technique TaskName TaskContent ClientProcessId ParentProcessId
+
+
 
