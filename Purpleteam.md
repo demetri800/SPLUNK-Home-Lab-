@@ -765,7 +765,7 @@ Step #10: Building real dectection against potentially malicious registry key ch
 
 <img width="1191" height="344" alt="Screenshot 2026-09-26 at 2 07 48 PM" src="https://github.com/user-attachments/assets/0c6211d1-2c0c-49a5-b402-98a8d17d65c7" />
 
-This detection functions by identifying a high value persistence location being modified. The context provided by the event is used to  understand why a result may deserve extra attention to be vetted. The goal is for the system to alert based on behavior rather than artifact specific detection. A detection rule that actively seeks for a specific keyword such as "Atomic Red Team" is ineffective, because attackers can label this value anything.  
+This detection functions by identifying a high value persistence location being modified. The context provided by the event is used to  understand why a result may deserve further investigation. The goal is for the system to alert based on behavior rather than artifact specific detection. A detection rule that actively seeks for a specific keyword such as "Atomic Red Team" is ineffective, because attackers can label this value anything.  
 
 
 Detection Logic Walkthrough: 
@@ -785,7 +785,7 @@ index=purple_team_lab event_id.id=13 → Examine Sysmon 13 events only
 | where like(TargetObject,"%CurrentVersion%Run%") → Only keep registry changes where the registry path contains CurrentVersion and later contains Run
 
 
-so the keys are folders that contain the configuration settings of how your devices operating system and applications start and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistance and disable security
+The keys are folders that contain the configuration settings of how your devices system and applications start-up and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistence upon log-on or disable security
 
 Step #11: Validate
 
@@ -795,9 +795,120 @@ Proves that legitamite software can also run keys and which may create instances
 
 <img width="1434" height="647" alt="Screenshot 2026-09-26 at 3 30 43 PM" src="https://github.com/user-attachments/assets/1d785338-96af-4605-9ec3-938f95c6e072" />
 
+Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry 
 
 <img width="1170" height="469" alt="Screenshot 2026-09-26 at 4 06 49 PM" src="https://github.com/user-attachments/assets/19708e96-f1fa-456f-ba2c-847a825c9555" />
 
 <img width="1385" height="408" alt="Screenshot 2026-09-26 at 4 07 17 PM" src="https://github.com/user-attachments/assets/8a6d21e0-c97e-40aa-b4df-f116bbb95da5" />
+
+
+<img width="869" height="237" alt="Screenshot 2026-09-27 at 12 27 31 PM" src="https://github.com/user-attachments/assets/5198040e-5ca7-49d1-853b-eac31213d2ff" />
+
+Detection:
+Registry Run Key Persistence
+
+MITRE ATT&CK:
+T1547.001
+
+Data Source:
+Sysmon Event ID 13
+
+Detection Logic:
+Detects registry value writes involving Windows
+CurrentVersion\Run / RunOnce autorun locations.
+
+Important Fields:
+Image
+TargetObject
+Details
+User
+ProcessGuid
+
+Validation:
+Atomic Red Team T1547.001 Test #1
+
+Cross-Source Validation:
+Sysmon Event 1 →  Security 4688 →  Sysmon Event 13
+
+Potential False Positives:
+Legitimate applications installing or updating
+autorun components.
+
+Investigation:
+Determine what process made the change, what executable
+was configured, where that executable resides, which user
+performed the modification, and what preceded the action.
+
+
+
+
+## STAGE 8: Scheduled ATTACK persistence
+
+Objective: Detecting creation of scheduled tasks falling under MITRE ATT&CK T1053.005. We are determining what created the task, what the task executes, the account that triggered it, and its behavior. Upon investigation and acquired context, we develop our SPLUNK detection rules flag processes worth investigating. Lastly, we validate the detection system and its capabilities by cross-checking other log sources to build the evidence-chain. Windows Security Event 4698 is specifically generated when a scheduled task is created, provided the relevant audit policy is enabled. Microsoft also recommends monitoring scheduled-task creation because malware can use tasks for persistence or execution. Task creation in Windows lets you automate programs, scripts, or system commands to run automatically using the built-in Task Scheduler tool.
+
+Step #1: Enables successful Auditing 
+
+The follwoing powershell commands allowing windows security to produce events such as:
+
+4698 = Scheduled task created
+4699 = Scheduled task deleted
+4700 = Scheduled task enabled
+4701 = Scheduled task disabled
+4702 = Scheduled task updated
+
+<img width="1069" height="167" alt="Screenshot 2026-09-27 at 12 44 36 PM" src="https://github.com/user-attachments/assets/51f43d02-5049-4c20-826f-ed627ae362af" />
+
+For this stage, I am choosing test #1 - scheduled task startup which creates two tasks OnLogon and OnStartup
+
+<img width="877" height="354" alt="Screenshot 2026-09-27 at 12 53 28 PM" src="https://github.com/user-attachments/assets/5695aa1d-a6e7-444e-b511-e6d8748b9f02" />
+
+Step#4: Finding the Security 4698 Event in SPLUNK
+
+<img width="1440" height="665" alt="Screenshot 2026-09-27 at 2 24 07 PM" src="https://github.com/user-attachments/assets/1c97477c-01f1-41ab-b824-4f02ae1cf3ab" />
+
+<img width="1438" height="677" alt="Screenshot 2026-09-27 at 2 57 02 PM" src="https://github.com/user-attachments/assets/4a08a8bf-28e2-492a-b81d-5ec9cf5ee538" />
+
+Important Fields: 
+
+SubjectUserName
+→ Who requested the task creation?
+
+TaskName
+→ What task was created?
+
+TaskContent
+→ What exactly is the task configured to do?
+
+ClientProcessId
+→ Which process requested creation?
+
+ParentProcessId
+→ What created that process?
+
+
+
+<Triggers> → WHEN will it execute?  <StartBoundary>2026-09-27T14:00:00</StartBoundary>
+
+<Principals> → WHO will it run as? - <user ID> S-1-5-18
+
+ 
+ <Command>...</Command> → What will execute? cmd.exe
+ +
+ <Arguments>...</Arguments> c calc.exe
+
+
+Step #7: Finding the process that created the task
+
+The following image details the sysmon log event.id 1  
+
+<img width="1440" height="676" alt="Screenshot 2026-09-27 at 5 59 24 PM" src="https://github.com/user-attachments/assets/cb7bf832-70e1-4995-9f46-84d0731674d6" />
+
+
+<img width="1077" height="475" alt="Screenshot 2026-09-27 at 6 53 30 PM" src="https://github.com/user-attachments/assets/abda20d7-fec9-47cb-8709-d534575a39fe" />
+
+
+Name of the scheduled task: T1053_005_OnStartup
+
+cmd.exe /c calc.exe → scheduled task launches cmd.exe, and cmd.exe is told with /c to run calc.exe and then exit.
 
 
