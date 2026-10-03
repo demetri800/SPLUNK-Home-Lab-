@@ -1060,4 +1060,65 @@ process/network activity.
 
 Kali Network Attack Simulation 
 
+## STAGE 9: Kali Network Attack Simulation - Brute Forcing
+
+KALI-RED01 → Network reconnaissance → WIN-VICTIM01 → SMB authentication attempts → Windows Security 4625 → 
+Splunk → Brute-force-detection
+
+Step #1: Ensuring connectivity between windows and kali machine 
+
+<img width="485" height="116" alt="Screenshot 2026-09-28 at 3 11 41 PM" src="https://github.com/user-attachments/assets/f45e40ce-88a4-4371-b956-a2fcfca2fa2f" />
+
+<img width="726" height="259" alt="Screenshot 2026-09-28 at 3 11 55 PM" src="https://github.com/user-attachments/assets/5e69a9f3-5dee-4639-8e21-443426eecaee" />
+
+
+____
+
+Nmap was tested from Kali on the WindowsVIC-01 but the the windows firewall blocked the port status details. Unable to determine if any of the ports are open or closed. 
+
+<img width="528" height="233" alt="Screenshot 2026-09-28 at 3 26 55 PM" src="https://github.com/user-attachments/assets/737752cc-b9eb-445f-83c0-51eec184eab1" />
+
+
+Configuring Windows Firewall Rules to allow inbound TCP 445 connections so the Kali Attack can be simulated
+
+<img width="1104" height="526" alt="Screenshot 2026-09-28 at 4 02 59 PM" src="https://github.com/user-attachments/assets/4912123b-7d3b-4ea2-8f71-8205e424d615" />
+
+After modifying firewall rules the Kali nmap port scan test was successful 
+
+<img width="521" height="164" alt="Screenshot 2026-09-28 at 4 07 57 PM" src="https://github.com/user-attachments/assets/73a944c3-cc03-4a36-ba28-031331b16369" />
+
+Installing smb client on kali and initializing logon sessions
+
+Intentional failure (5x) for brute force detection on Splunk
+
+<img width="537" height="258" alt="Screenshot 2026-09-28 at 4 24 45 PM" src="https://github.com/user-attachments/assets/73980069-2730-4492-9bde-8a50cb415adb" />
+
+Splunk detected all five logon failures originating from the kali machine 
+
+Target UserName= Demetrius 
+Kali IP = 192.168.64.7 
+Logon Type = 3 
+
+<img width="817" height="611" alt="Screenshot 2026-09-28 at 4 29 11 PM" src="https://github.com/user-attachments/assets/731ebfd3-7a83-4c03-85af-3f390decc54e" />
+
+<img width="1440" height="534" alt="Screenshot 2026-09-28 at 4 34 40 PM" src="https://github.com/user-attachments/assets/6cde52da-a537-4019-a79b-e741dbf93140" />
+
+The status columns provide additional information on why they logon failed
+
+Status - 0xc000006d - Windows logon failure due to a bad username, incorrect password, or invalid authentication information
+Sub-status - 0xc000006a - UserName was correct but the password is wrong 
+
+WorkstationName and IP address defines what account/source generated them.
+
+Step #9: Enriching Detection by implemeting a 5 minute window Threshold
+
+The following SPL command was built for tracking logon attempts exceeding or equal to five occurring within five minutes. 
+
+<img width="1433" height="572" alt="Screenshot 2026-09-28 at 4 54 24 PM" src="https://github.com/user-attachments/assets/5f40f8ad-d932-4db7-b19e-0649c773b9a1" />
+
+| bin _time span=5m - breaks activity into five minute windows 
+| stats count as failed_attempts by _time host IpAddress TargetUserName - during this five minute period how may logon attempts came from this IP against this account on this host. 
+
+
+
 
