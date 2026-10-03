@@ -449,7 +449,7 @@ File was removed again and quarantined by the Windows Security Defender. This pr
 
 ____
 
-BAsed on the output the T1059.001.yaml already exists, but Microsoft Defender is blocking PowerShell from reading it. So I had to apply a temporary exclusion for this technique folder. 
+Based on the output the T1059.001.yaml already exists, but Microsoft Defender is blocking PowerShell from reading it. So I had to apply a temporary exclusion for this technique folder. 
 
 <img width="2048" height="431" alt="Screenshot 2026-09-18 at 12 24 54 PM" src="https://github.com/user-attachments/assets/36a68142-7d03-457e-81d5-6caaa863d21a" />
 
@@ -1112,13 +1112,61 @@ WorkstationName and IP address defines what account/source generated them.
 
 Step #9: Enriching Detection by implemeting a 5 minute window Threshold
 
-The following SPL command was built for tracking logon attempts exceeding or equal to five occurring within five minutes. 
+The following SPL command was built for tracking logon attempts exceeding or equal to five occurring within a five minute timeframe. 
 
 <img width="1433" height="572" alt="Screenshot 2026-09-28 at 4 54 24 PM" src="https://github.com/user-attachments/assets/5f40f8ad-d932-4db7-b19e-0649c773b9a1" />
 
 | bin _time span=5m - breaks activity into five minute windows 
 | stats count as failed_attempts by _time host IpAddress TargetUserName - during this five minute period how may logon attempts came from this IP against this account on this host. 
 
+| where failed_attempts >= 5 - there was at least five logon failure attempts
 
+This SPL detection rule demonstrates how password attempts appears based on set conditions indicative of brute forcing. 
+
+
+<img width="1434" height="587" alt="Screenshot 2026-10-03 at 9 41 51 AM" src="https://github.com/user-attachments/assets/4e7180e3-0d73-4e73-b777-8271e42a24b0" />
+
+____
+
+This new rule enhance the pervious base detection by defining the severity based on the amounted logon attempts. Due to the SMB  authentication lock out, I was unable to reach the "high volume failed authentication". However I was able to simulate brute forcing with 10 logon attempts to demonstrate the "elevated failed authentication" context variation. 
+
+<img width="611" height="380" alt="Screenshot 2026-10-03 at 10 50 46 AM" src="https://github.com/user-attachments/assets/c79e2a5e-593e-432f-973a-d5cceba27061" />
+
+<img width="1384" height="537" alt="Screenshot 2026-10-03 at 10 04 58 AM" src="https://github.com/user-attachments/assets/7b435781-f33a-4c7c-b999-9219b7c4ce5f" />
+
+<img width="1388" height="161" alt="Screenshot 2026-10-03 at 10 05 18 AM" src="https://github.com/user-attachments/assets/34dee98e-be3f-4a9d-85c7-2ec0c034c3d7" />
+
+Edit ****
+Technique:
+T1110 — Brute Force
+
+Data Source:
+Windows Security Event 4625
+
+Attack Source:
+KALI-RED01
+
+Target:
+WIN-VICTIM01
+
+Detection:
+5 or more authentication failures from the same
+source IP against the same account within 5 minutes.
+
+Validation:
+Five intentionally failed SMB logon attempts from Kali.
+
+Expected Evidence:
+Source IP = Kali
+Target account = Demetrius
+Logon Type = 3
+
+Edit****
+
+
+## STAGE 10: SMB CORRELATION
+
+
+Objective: For this objective were correlating a sequence of authication events to one incident 
 
 
