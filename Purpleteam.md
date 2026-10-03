@@ -1167,6 +1167,28 @@ Edit****
 ## STAGE 10: SMB CORRELATION
 
 
-Objective: For this objective were correlating a sequence of authication events to one incident 
+Objective: This stage acts as a follow up to stage 9 by correlating a sequence of authentication events into one suspicious incident. The goal now is to determine if the same source responsible for the failed authentication attempts eventually successful. 
+
+
+Step #1: Generating correlation sequence by simulating failed logon attempts 
+
+<img width="502" height="198" alt="Screenshot 2026-10-03 at 12 42 15 PM" src="https://github.com/user-attachments/assets/8042fc47-c08f-49c6-ac45-81e6a32d0384" />
+
+
+
+
+Step #2: Confirmation of the failed smb logon events from SPLUNK ingestion
+
+
+
+<img width="1412" height="483" alt="Screenshot 2026-10-03 at 12 50 49 PM" src="https://github.com/user-attachments/assets/94289714-d1be-4281-975f-cccd84340314" />
+
+
+
+
+Step #3: 
+
+
+<img width="1434" height="388" alt="Screenshot 2026-10-03 at 1 01 18 PM" src="https://github.com/user-attachments/assets/538bf108-470b-4091-83e0-9a8ed04283e3" />
 
 
