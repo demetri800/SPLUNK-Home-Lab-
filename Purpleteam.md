@@ -1184,11 +1184,60 @@ Step #2: Confirmation of the failed smb logon events from SPLUNK ingestion
 <img width="1412" height="483" alt="Screenshot 2026-10-03 at 12 50 49 PM" src="https://github.com/user-attachments/assets/94289714-d1be-4281-975f-cccd84340314" />
 
 
-
-
 Step #3: Successful Authentication confirmed
 
 
 <img width="1434" height="388" alt="Screenshot 2026-10-03 at 1 01 18 PM" src="https://github.com/user-attachments/assets/538bf108-470b-4091-83e0-9a8ed04283e3" />
 
+Step #4: Consolidating failures and successful logons to establish a timeline 
 
+
+<img width="1419" height="652" alt="Screenshot 2026-10-03 at 2 08 24 PM" src="https://github.com/user-attachments/assets/04b38b8c-1e2f-40e7-9b43-d45ec79bd33a" />
+
+Step #5: Correlation detection build 
+
+The detection works differently by  counting the successful logons only after at least 5 failed attempts were conducted prior. This query reveals more context other than it just showing  the number of failed logons. We now have a sequence that reveals an indication of a possible password guessing attack that was successful. This may not always be the case, but atleast provides substantial evidence to investigate further. 
+
+<img width="1412" height="649" alt="Screenshot 2026-10-03 at 2 41 52 PM" src="https://github.com/user-attachments/assets/158aba47-ba98-41d0-a33d-c3339bccb0c9" />
+
+Investigation Steps:
+
+Was the source IP expected for that account logon? 
+
+Does the authentication method makes sense and is it normal according to the the baseline of normal activity?
+
+Do the failures immediately preceded the success?
+
+What activity occurred after authentication? 
+
+Detection:
+Successful Network Logon After Repeated Failures
+
+MITRE ATT&CK:
+T1110 — Brute Force
+
+Primary Events:
+Windows Security 4625
+Windows Security 4624
+
+Objective:
+Identify successful network authentication from a
+source IP/account combination following at least five
+failed authentication attempts within five minutes.
+
+Attack Source:
+KALI-RED01
+
+Target:
+WIN-VICTIM01
+
+Validation:
+Five intentional SMB authentication failures followed
+by one successful SMB authentication.
+
+Correlation Fields:
+Source IP
+Target account
+Destination host
+Timestamp
+Logon type
