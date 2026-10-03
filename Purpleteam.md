@@ -1186,7 +1186,7 @@ Step #2: Confirmation of the failed smb logon events from SPLUNK ingestion
 
 
 
-Step #3: 
+Step #3: Successful Authentication confirmed
 
 
 <img width="1434" height="388" alt="Screenshot 2026-10-03 at 1 01 18 PM" src="https://github.com/user-attachments/assets/538bf108-470b-4091-83e0-9a8ed04283e3" />
