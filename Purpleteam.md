@@ -1241,3 +1241,7 @@ Target account
 Destination host
 Timestamp
 Logon type
+
+## STAGE #11: 
+
+
