@@ -4,17 +4,12 @@
 
 Project Overview: 
 
-This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a virtual network environment with Kali Linux and Windows 11. The techniques used were encoded powershell T1059.001, Registry Run Key Persistence T1547.001, T1053.005, T1110 This set-up was designed using SPLUNKs open telemetry collector service to forward the Windows sysmon and security logs to the indexer. With SPLUNKs built-in SPL command-line, several detection models were created against the MITRE ATTACK types. From the Sysmon events logs, I gathered the important fields along with additional context to correlate events and build process chain  to enrich Reliability and effectiveness of the detection rules were tested through cross source validation and consolidated the panels into SPLUNKs dashboard for live detection and visualization. 
+This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a isolated virtual network environment with Kali Linux attacker machine and Windows 11 victim. The techniques included were Encoded Powershell T1059.001, Registry Run Key Persistence T1547.001, Scheduled Task Persistence T1053.005, and SMB Password Guessing T1110. All endpoint based technoques were performed from Powershell on the Windows 11 virtual machine, with the exception of SMB password guessing activity was generated remontely by Kali. The detection set-up was configured on the Windows 11 VM with SPLUNK Enterprises Open Telemetry Collector and HTTP Event Collector (HEC) to forward Windows Sysmon and Security logs to the indexer. With SPLUNKs built-in SPL command-line, several detection models were created against the MITRE ATTACK types. The models started from broad searches to ensure log reachability before enriching the detection logic to a fully functional alert. From the Sysmon events logs, I gathered important fields along with additional contextual evidence to correlate events and build a process chain. Reliability and effectiveness of the detection rules were tested through cross source validation and consolidated into panels on SPLUNKs dashboard for live detection and visualization. This project helps in understanding the role of a purple team SOC analyst, by learning how to investigate incidents from different attack techniques, and analyzing context across a multitude of log sources. 
 
 
-The goal of this project is to teach m aids on learning how to think like a SOC Analyst, its about using context to correlate logs to illustrate chain-process trees. 
+Objectives:
 
 
-It uses SPLUNK open telemetry collector to forward  SPLUNK enterprise and open telemetry collector to forward Windows Sysmon
-
-
-
-What does a suspicious PowerShell attack look like in Sysmon?
 What Windows events appear after a failed-login attack?
 What parent/child process relationships indicate suspicious execution?
 What network activity does an attack generate?
