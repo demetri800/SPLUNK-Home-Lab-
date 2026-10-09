@@ -2,7 +2,11 @@
 
 
 
-Project objective Questions: 
+Project Overview: 
+
+This home lab project was developed to simulate MITRE ATTACK TECHNIQUES by utilizing Atomic Red in a virtual network environment. This set-up was designed using SPLUNKs open telemetry collector service to forward the Windows sysmon and security logs to the indexer. Using SPLUNKs built-in SPL command-line, I built detections models and tested their reliability and effective by validating other log sources. I set-up It uses SPLUNK open telemetry collector to forward  SPLUNK enterprise and open telemetry collector to forward Windows Sysmon 
+
+
 
 What does a suspicious PowerShell attack look like in Sysmon?
 What Windows events appear after a failed-login attack?
@@ -432,7 +436,9 @@ Command and Scripting Interpreter: PowerShell
 
 ___
 
-Problems: Atomics reporsitory was present but I was unable to find the attack technique definition in the Atomics Folder, required reinstallation of the Atomics Techniques Folder 
+Technical Issues & Troubleshooting 
+
+Atomics reporsitory was present but I was unable to find the attack technique definition in the Atomics Folder, required reinstallation of the Atomics Techniques Folder 
 
 
 <img width="810" height="114" alt="Screenshot 2026-09-15 at 8 44 08 PM" src="https://github.com/user-attachments/assets/d2fd1171-cced-4cbc-baf1-cb39927a5a5d" />
@@ -484,19 +490,23 @@ Parent Process: powershell.exe {520a07f6-6b70-6aa5-b100-000000000d00}
                                            ⬇️
 
 Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} - this execution launches both conhost and the powershell encoded command 
-                  |_________________________________________________________|
-
-                  ⬇️                                                         ⬇️          
+                     
 
 
                      
-Parent Image: conhost.exe:                                             Parent Image: powershell.exe 
-Process GUID: {520a07f6-70b0-6aad-fb0a-000000000d00}:                  Process GUID: {520a07f6-70b0-6aad-fc0a-000000000d00}
-Normal supporting process content console window host created   →       Command line: powershell.exe -e encoded powershell 
-by cmd.exe, provides the console interface for command line            suspicious branch of the process tree
-programs (cmd).                                                                                                                                   
+Parent Image: conhost.exe:                                             
+Process GUID: {520a07f6-70b0-6aad-fb0a-000000000d00}:                  
+Normal supporting process content console window host created         
+by cmd.exe, provides the console interface for command line            
+programs (cmd).                      
 
 
+Parent Image: powershell.exe 
+Process GUID: {520a07f6-70b0-6aad-fc0a-000000000d00}
+Command line: powershell.exe -e encoded powershell 
+suspicious branch of the process tree
+
+ 
 Analysis chain:
 
 
@@ -1175,10 +1185,7 @@ Step #1: Generating correlation sequence by simulating failed logon attempts
 <img width="502" height="198" alt="Screenshot 2026-10-03 at 12 42 15 PM" src="https://github.com/user-attachments/assets/8042fc47-c08f-49c6-ac45-81e6a32d0384" />
 
 
-
-
 Step #2: Confirmation of the failed smb logon events from SPLUNK ingestion
-
 
 
 <img width="1412" height="483" alt="Screenshot 2026-10-03 at 12 50 49 PM" src="https://github.com/user-attachments/assets/94289714-d1be-4281-975f-cccd84340314" />
@@ -1206,7 +1213,7 @@ Was the source IP expected for that account logon?
 
 Does the authentication method makes sense and is it normal according to the the baseline of normal activity?
 
-Do the failures immediately preceded the success?
+Do the failures immediately precede the success?
 
 What activity occurred after authentication? 
 
@@ -1242,6 +1249,46 @@ Destination host
 Timestamp
 Logon type
 
-## STAGE #11: 
+## STAGE #11: FINALIZED SOC DASHBOARD 
+
+Objective: This final stage of my project focuses on consolidating all of the SPL detection model results and developing panels for each of them on the SOC dashboard. For this part, I did perform some minor alterations to the original SPL commands which allowed me to represent the data in different ways. I also configured the dashboard to be interactive, allowing the search results to open in a new tab on-click. 
+
+
+Panel #1: Encoded Powershell 
+
+This panel is derived from the stage 5 process of the simulated command and scripting MITRE TECHNIQUE T1509. 
+
+<img width="1398" height="339" alt="Screenshot 2026-10-06 at 11 32 16 PM" src="https://github.com/user-attachments/assets/6b77d22d-b798-41e6-922f-945fdb03b99b" />
+
+___
+
+Panel #2: Registry Persistence
+
+<img width="1410" height="295" alt="Screenshot 2026-10-06 at 11 32 54 PM" src="https://github.com/user-attachments/assets/7b2603a6-fec4-49ec-bdc0-148a80af9dd9" />
+
+__
+
+Panel #3: Scheduled Task Creation
+
+<img width="1404" height="197" alt="Screenshot 2026-10-06 at 11 33 41 PM" src="https://github.com/user-attachments/assets/dfa32b1f-d9ea-4586-bd97-835b8fa00153" />
+
+__
+
+Panel #4: Repeated Failed Network Logons
+
+<img width="724" height="262" alt="Screenshot 2026-10-06 at 11 35 22 PM" src="https://github.com/user-attachments/assets/8bb70c71-dbe9-4f08-9840-c00c61412e83" />
+
+__
+
+Panel #5: Successful Login Following Repeated Failures
+
+<img width="1413" height="210" alt="Screenshot 2026-10-06 at 11 35 43 PM" src="https://github.com/user-attachments/assets/40bec732-ea8b-4b51-9d25-5bcc6e20e372" />
+
+__
+
+Panel #6: Event Telemetry Overview
+
+<img width="688" height="266" alt="Screenshot 2026-10-06 at 11 36 31 PM" src="https://github.com/user-attachments/assets/8bfb46af-d2dc-4d5d-98fe-5331741c5149" />
+
 
 
