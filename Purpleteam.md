@@ -625,7 +625,18 @@ For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTA
 
 ## STAGE 6: DETECTION ENGINEERING
 
-Objective: Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
+**Objectives:**
+
+1. Extract useful Sysmon fields using spath.
+2. Build a behavioral detection for encoded PowerShell execution.
+3. Detect multiple encoded-command argument variations such as -e, -enc, and -EncodedCommand.
+4. Avoid relying on Atomic-specific strings or known payload content.
+5. Validate the detection using repeatable Atomic tests.
+6. Test normal PowerShell activity to identify potential false positives.
+7. Cross-reference Sysmon Event 1 with PowerShell Event 4104.
+8. Add MITRE ATT&CK and analyst-friendly contextual fiel
+
+Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
 
 Step #1; Identifying the extracted field names from SPLUNK: 
 
@@ -775,7 +786,22 @@ Validated
 
 ## STAGE 7: REGISTRY RUN-KEY PERSISTANCE 
 
-Objective: Simulate a persistence mechanism where an attacker places a command or executable path in a Windows autorun registry location so it can execute when the user logs on. Atomic Red Team currently lists Test #1, “Reg Key Run,” which adds an Atomic Red Team value under the current user's Run key and provides a cleanup command afterward
+**Objectives**
+
+1. Enable Sysmon registry-event collection.
+2. Generate normal registry activity as a baseline.
+3. Execute Atomic Red Team T1547.001.
+4. Identify the Registry Run key modification.
+5. Analyze Sysmon Event ID 13 SetValue telemetry.
+6. Identify the process responsible for modifying the registry.
+7. Correlate registry activity with process creation events.
+8. Build a behavioral detection for Run/RunOnce modifications.
+9. Exclude unrelated registry activity such as RunMRU.
+10. Test legitimate and simulated persistence changes.
+11. Clean up the Atomic registry artifact.
+12. Document false-positive and investigation considerations.
+
+Simulate a persistence mechanism where an attacker places a command or executable path in a Windows autorun registry location so it can execute when the user logs on. Atomic Red Team currently lists Test #1, “Reg Key Run,” which adds an Atomic Red Team value under the current user's Run key and provides a cleanup command afterward
 
 
 Step #1: Verfiy Sysmon registry event collection 
@@ -925,7 +951,23 @@ performed the modification, and what preceded the action.
 
 ## STAGE 8: Scheduled ATTACK persistence
 
-Objective: Detecting creation of scheduled tasks falling under MITRE ATT&CK T1053.005. We are determining what created the task, what the task executes, the account that triggered it, and its behavior. Upon investigation and acquired context, we develop our SPLUNK detection rules flag processes worth investigating. Lastly, we validate the detection system and its capabilities by cross-checking other log sources to build the evidence-chain. Windows Security Event 4698 is specifically generated when a scheduled task is created, provided the relevant audit policy is enabled. Microsoft also recommends monitoring scheduled-task creation because malware can use tasks for persistence or execution. Task creation in Windows lets you automate programs, scripts, or system commands to run automatically using the built-in Task Scheduler tool.
+**Objective:** 
+
+1. Enable scheduled-task auditing.
+2. Inspect Atomic Red Team T1053.005 before execution.
+3. Create controlled startup and logon scheduled tasks.
+4. Identify Windows Security Event 4698.
+5. Examine scheduled-task XML.
+6. Identify task triggers, execution commands, arguments, and principals.
+7. Identify the schtasks.exe process responsible for creating the tasks.
+8. Correlate Security 4698 with Sysmon Event 1 and Security 4688.
+9. Build a behavioral scheduled-task creation detection.
+10. Add contextual enrichment for commands such as cmd.exe, PowerShell, and other interpreters.
+11. Perform benign scheduled-task testing.
+12. Validate the detection through repeated Atomic execution.
+13. Remove the Atomic scheduled tasks after testing.
+    
+Detecting creation of scheduled tasks falling under MITRE ATT&CK T1053.005. We are determining what created the task, what the task executes, the account that triggered it, and its behavior. Upon investigation and acquired context, we develop our SPLUNK detection rules flag processes worth investigating. Lastly, we validate the detection system and its capabilities by cross-checking other log sources to build the evidence-chain. Windows Security Event 4698 is specifically generated when a scheduled task is created, provided the relevant audit policy is enabled. Microsoft also recommends monitoring scheduled-task creation because malware can use tasks for persistence or execution. Task creation in Windows lets you automate programs, scripts, or system commands to run automatically using the built-in Task Scheduler tool.
 
 Step #1: Enables successful Auditing 
 
@@ -1143,6 +1185,22 @@ Kali Network Attack Simulation
 
 ## STAGE 9: Kali Network Attack Simulation - Brute Forcing
 
+**Objectives:**
+
+1. Bring the Kali attacker VM into the active attack workflow.
+2. Verify connectivity between Kali and Windows.
+3. Install and use Nmap to scan selected Windows ports.
+4. Identify SMB service availability on TCP port 445.
+5. Configure a temporary Windows Firewall rule for controlled SMB testing.
+6. Use Kali smbclient to generate intentional authentication failures.
+7. Confirm Windows Security Event 4625 records the attempts.
+8. Verify the source IP corresponds to the Kali VM.
+9. Identify network logon behavior such as Logon Type 3.
+10. Build a five-minute threshold detection for repeated failures.
+11. Group failures by source IP, target account, and destination host.
+12. Add severity/context based on the number of failures.
+13. Map the activity to MITRE ATT&CK T1110.
+
 KALI-RED01 → Network reconnaissance → WIN-VICTIM01 → SMB authentication attempts → Windows Security 4625 → 
 Splunk → Brute-force-detection
 
@@ -1245,8 +1303,20 @@ Logon Type = 3
 Edit****
 
 
-## STAGE 10: SMB CORRELATION
+## STAGE 10: AUTHENTICATION EVENT CORRELATION
 
+1. Generate several failed SMB authentications from Kali.
+2. Follow the failures with one successful authentication.
+3. Confirm the failures using Windows Security Event 4625.
+4. Confirm the success using Windows Security Event 4624.
+5. Verify both events share the same source IP and target account.
+6. Combine successful and failed authentication events into one timeline.
+7. Correlate multiple failures followed by a successful login.
+8. Use a time window to ensure the events are meaningfully related.
+9. Build a detection for successful authentication after repeated failures.
+10. Distinguish higher-confidence suspicious sequences from isolated login failures.
+11. Demonstrate multi-event incident correlation in Splunk.
+12. Preserve the timeline as evidence for the final project.
 
 Objective: This stage acts as a follow up to stage 9 by correlating a sequence of authentication events into one suspicious incident. The goal now is to determine if the same source responsible for the failed authentication attempts eventually successful. 
 
@@ -1322,7 +1392,15 @@ Logon type
 
 ## STAGE #11: FINALIZED SOC DASHBOARD 
 
-Objective: This final stage of my project focuses on consolidating all of the SPL detection model results and developing panels for each of them on the SOC dashboard. For this part, I did perform some minor alterations to the original SPL commands which allowed me to represent the data in different ways. I also configured the dashboard to be interactive, allowing the search results to open in a new tab on-click. 
+This final stage of my project focuses on consolidating all of the SPL detection model results and developing panels for each of them on the SOC dashboard. For this part, I did perform some minor alterations to the original SPL commands which allowed me to represent the data in different ways. I also configured the dashboard to be interactive, allowing the search results to open in a new tab on-click. 
+
+**Objectives:** 
+
+1. Review and validate all completed detections.
+2. Build the final Purple Team SOC dashboard.
+3. Create detailed table panels for investigation data.
+4. Create charts for authentication activity and telemetry overview.
+5. Consolidate MITRE ATT&CK mappings across the project.
 
 
 Panel #1: Encoded Powershell 
