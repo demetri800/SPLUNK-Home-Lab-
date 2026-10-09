@@ -82,7 +82,6 @@ ____
 
 ## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION
 
-
 ____
 
 **Objectives:**
@@ -95,16 +94,13 @@ ____
 6. Locate the corresponding Sysmon events in Event Viewer.
 7. Learn important fields such as Image, CommandLine, ProcessGuid, ParentImage, and User.
 
+Sysmon itself doesn't decide whether something is malicious. It records evidence. Microsoft specifically describes Sysmon events as observational telemetry rather than alerts; their value comes from correlation and context.Sysmon command provides richer data evidence than windows logs. Deeper visibility and details for windows events.
+
 ___
 
 <img width="748" height="253" alt="Screenshot 2026-09-05 at 4 25 46 PM" src="https://github.com/user-attachments/assets/fed7aa21-77c5-4901-9513-a20878c275cf" />
 
-
-
 <img width="776" height="238" alt="Screenshot 2026-09-05 at 4 25 27 PM" src="https://github.com/user-attachments/assets/7b13334e-1116-45ed-a046-bebab973f350" />
- 
-
-Sysmon itself doesn't decide whether something is malicious. It records evidence. Microsoft specifically describes Sysmon events as observational telemetry rather than alerts; their value comes from correlation and context.Sysmon command provides richer data evidence than windows logs. Deeper visibility and details for windows events.
 
 Process creation
 
@@ -145,13 +141,10 @@ downloaded file
       ↓
 new process
 
-Sysmon Startup Configuration: 
+Step #1: Sysmon Startup Configuration: 
 
 <img width="998" height="581" alt="Screenshot 2026-09-05 at 4 05 37 PM" src="https://github.com/user-attachments/assets/8a7d791f-6d0e-408f-be7c-3b37acce0dcb" />
-
-
 ____
-
 
 <img width="777" height="258" alt="Screenshot 2026-09-05 at 4 25 56 PM" src="https://github.com/user-attachments/assets/46664c0c-ce9b-45ab-a216-d060c3411a5b" />
 
@@ -161,28 +154,10 @@ ____
 
 ____
 
-This syntax is a little unintuitive.
-
-Because there are no exclusions inside the rule, it effectively means:
-
-Log all process creation events.
-
-Microsoft's current example specifically notes this behavior for empty onmatch="exclude" rules.
-
-We are doing the same thing for:
+Show me everything in these categories so I can learn what normal activity looks like:
 
 <NetworkConnect onmatch="exclude" />
-
-and:
-
 <DNSQuery onmatch="exclude" />
-
-So initially we're saying:
-
-Show me everything in these categories so I can learn what normal activity looks like.
-
-Later we'll tune out noise.
-
 ____
 
 Testing Process-Create Configurations: 
@@ -199,34 +174,23 @@ Sysmon Notepad Process execution test-run:
 
 <img width="623" height="441" alt="Screenshot 2026-09-05 at 5 09 22 PM" src="https://github.com/user-attachments/assets/a083ba9e-a09c-49dc-85a9-3e8821668746" />
 
-That tells us:
-
 PowerShell launched Notepad.
-
-Later an attack might look like:
 
 WINWORD.EXE
       ↓
 powershell.exe
       ↓
 rundll32.exe
-
-The same fields allow us to reconstruct that chain.
-
 ___
 
 Testing DNS and Network Connection Sysmon Configuraton:
-
-____
+__
 
 <img width="803" height="258" alt="Screenshot 2026-09-05 at 5 18 59 PM" src="https://github.com/user-attachments/assets/1401318e-ce8e-4120-ba0f-494f47c0c82f" />
 
 <img width="627" height="438" alt="Screenshot 2026-09-05 at 5 21 56 PM" src="https://github.com/user-attachments/assets/34033b74-e54d-43c8-b47d-0d6c90945302" />
 
 <img width="626" height="436" alt="Screenshot 2026-09-05 at 5 22 39 PM" src="https://github.com/user-attachments/assets/6d6e5080-bdce-400d-be45-6d2aa5fcaae6" />
-
-
-
 
 ProcessId
     = Windows' current numerical ID for the process
