@@ -48,13 +48,13 @@ _____
 
 **Objectives:**
 
-Build the Windows 11 victim VM
-Build the Kali Linux attacker VM
-Configure the UTM virtual network
-Verify VM connectivity
-Establish clear attacker/victim roles
-Create a clean baseline/checkpoint for recovery
-Prepare the environment for later logging, attack simulation, and Splunk integration
+1. Build the Windows 11 victim VM.
+2. Build the Kali Linux attacker VM.
+3. Configure the UTM virtual network.
+4. Verify VM connectivity.
+5. Establish clear attacker/victim roles.
+6. Create a clean baseline/checkpoint for recovery.
+7. Prepare the environment for logging, attack simulation, and Splunk integration.
 
 
 
