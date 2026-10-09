@@ -4,13 +4,37 @@
 
 Project Overview: 
 
-This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a isolated virtual network environment with Kali Linux attacker machine and Windows 11 victim. The techniques included were Encoded Powershell T1059.001, Registry Run Key Persistence T1547.001, Scheduled Task Persistence T1053.005, and SMB Password Guessing T1110. All endpoint based technoques were performed from Powershell on the Windows 11 virtual machine, with the exception of SMB password guessing activity was generated remontely by Kali. The detection set-up was configured on the Windows 11 VM with SPLUNK Enterprises Open Telemetry Collector and HTTP Event Collector (HEC) to forward Windows Sysmon and Security logs to the indexer. With SPLUNKs built-in SPL command-line, several detection models were created against the MITRE ATTACK types. The models started from broad searches to ensure log reachability before enriching the detection logic to a fully functional alert. From the Sysmon events logs, I gathered important fields along with additional contextual evidence to correlate events and build a process chain. Reliability and effectiveness of the detection rules were tested through cross source validation and consolidated into panels on SPLUNKs dashboard for live detection and visualization. This project helps in understanding the role of a purple team SOC analyst, by learning how to investigate incidents from different attack techniques, and analyzing context across a multitude of log sources. 
+This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a isolated virtual network environment with Kali Linux attacker machine and Windows 11 victim. The techniques included were Encoded Powershell T1059.001, Registry Run Key Persistence T1547.001, Scheduled Task Persistence T1053.005, and SMB Password Guessing T1110. All endpoint based technoques were performed from PowerShell on the Windows 11 virtual machine, with the exception of SMB password guessing activity was generated remontely by Kali. The detection set-up was configured on the Windows 11 VM with SPLUNK Enterprises Open Telemetry Collector and HTTP Event Collector (HEC) to forward Windows Sysmon, Windows Security, and Powershell Script Blocking logs to the reciever to be stored and indexed. With SPLUNKs Search Processing Language (SPL), several detection models with field extraction, timestamping, filtering, and contextual enrichment. The models started from broad searches to verify log ingestion before refining the detection logic to a fully functional alert. Important fields such as process GUID, parent image, user accounts, source IPs, and registry paths, along with additional contextual evidence to correlate events and construct a process chain. Reliability and effectiveness of the detection rules were evaluated through cross source validation with Sysmon, Windows Security, and PowerShell logs. The finalized detections were consolidated into panels on SPLUNKs dashboard for live detection and visualization. This project helps in understanding the role of a purple team SOC analyst, by learning how to investigate incidents from different attack techniques, and analyzing context across a multitude of log sources. 
 
 
 Objectives:
 
+Build an isolated environment with Kali Linux and Windows and SPLUNK Enterprise SIEM.
 
-What Windows events appear after a failed-login attack?
+Confiure Windows Telemtery using Sysmon, Security, and Powershell Script Block Logging from Windows VM using powershell.
+
+Forward Windows security events into Splunk using the Splunk OpenTelemetry Collector and HTTP Event Collector (HEC).
+
+Simulate adversary techniques mapped to the MITRE ATT&CK framework using Atomic Red Team and controlled Kali Linux activity.
+
+Investigate suspicious behavior by analyzing process execution, parent-child relationships, registry modifications, scheduled tasks, and authentication activity.
+
+Develop SPL Detections:
+
+  - Registry Run Key persistence — T1547.001
+  - Scheduled Task creation — T1053.005
+  - Repeated failed network logons — T1110
+  - Successful authentication following repeated failures — T1110
+
+Correlate multiple Windows events and telemetry sources to reconstruct attack activity instead of relying on individual events alone.
+
+- Validate detections using repeatable attack simulations and evaluate potential false positives.
+
+- Create a Splunk dashboard that provides both high-level security visibility and detailed investigation data.
+
+- Document configuration issues, troubleshooting steps, detection logic, and lessons learned throughout the project.
+
+
 What parent/child process relationships indicate suspicious execution?
 What network activity does an attack generate?
 Can I find the activity in Splunk?
