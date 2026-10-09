@@ -148,27 +148,27 @@ ____
 
 <img width="777" height="258" alt="Screenshot 2026-09-05 at 4 25 56 PM" src="https://github.com/user-attachments/assets/46664c0c-ce9b-45ab-a216-d060c3411a5b" />
 
-____
+
 
 <img width="673" height="427" alt="Screenshot 2026-09-05 at 4 27 06 PM" src="https://github.com/user-attachments/assets/a0546a00-8c9c-4afb-aabb-67f568fa8f70" />
 
-____
+
 
 Show me everything in these categories so I can learn what normal activity looks like:
 
 <NetworkConnect onmatch="exclude" />
 <DNSQuery onmatch="exclude" />
-____
+
 
 Testing Process-Create Configurations: 
 
 <img width="606" height="178" alt="Screenshot 2026-09-05 at 4 44 02 PM" src="https://github.com/user-attachments/assets/b3bd5f20-c3fd-4f01-8f63-cbcc75864d3d" />
 
-___
+
 
 <img width="879" height="386" alt="Screenshot 2026-09-05 at 4 53 02 PM" src="https://github.com/user-attachments/assets/ef5f2b60-bf53-473a-a954-570cdbd3c546" />
 
-____
+
 
 Sysmon Notepad Process execution test-run: 
 
@@ -423,7 +423,7 @@ whoami
 
 Rather than investigating every process event separately.
 
-And this is precisely why we baseline process trees before Atomic Red Team: After I start the attacks, I , should already understand understand how to answer, “what actually initiated this process?” rather than stopping at the immediate parent.
+____
 
 
 
