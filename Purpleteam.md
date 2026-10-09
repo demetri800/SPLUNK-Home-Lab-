@@ -87,13 +87,13 @@ ____
 
 **Objectives:**
 
-1.Install Sysmon on the Windows 11 victim.
-2.Create and apply a Sysmon configuration.
-3.Enable process creation and other useful endpoint telemetry.
-4.Verify Sysmon is running correctly.
-5.Generate test activity such as launching Notepad.
-6.Locate the corresponding Sysmon events in Event Viewer.
-7.Learn important fields such as Image, CommandLine, ProcessGuid, ParentImage, and User.
+1. Install Sysmon on the Windows 11 victim.
+2. Create and apply a Sysmon configuration.
+3. Enable process creation and other useful endpoint telemetry.
+4. Verify Sysmon is running correctly.
+5. Generate test activity such as launching Notepad.
+6. Locate the corresponding Sysmon events in Event Viewer.
+7. Learn important fields such as Image, CommandLine, ProcessGuid, ParentImage, and User.
 
 ___
 
