@@ -2,12 +2,14 @@
 
 
 
-PROJECT OVERVIEW: 
+**Project Overview:**
 
-This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a isolated virtual network environment with Kali Linux attacker machine and Windows 11 victim. The techniques included were Encoded Powershell T1059.001, Registry Run Key Persistence T1547.001, Scheduled Task Persistence T1053.005, and SMB Password Guessing T1110. All endpoint based technoques were performed from PowerShell on the Windows 11 virtual machine, with the exception of SMB password guessing activity was generated remontely by Kali. The detection set-up was configured on the Windows 11 VM with SPLUNK Enterprises Open Telemetry Collector and HTTP Event Collector (HEC) to forward Windows Sysmon, Windows Security, and Powershell Script Blocking logs to the reciever to be stored and indexed. With SPLUNKs Search Processing Language (SPL), several detection models with field extraction, timestamping, filtering, and contextual enrichment. The models started from broad searches to verify log ingestion before refining the detection logic to a fully functional alert. Important fields such as process GUID, parent image, user accounts, source IPs, and registry paths, along with additional contextual evidence to correlate events and construct a process chain. Reliability and effectiveness of the detection rules were evaluated through cross source validation with Sysmon, Windows Security, and PowerShell logs. The finalized detections were consolidated into panels on SPLUNKs dashboard for live detection and visualization. This project helps in understanding the role of a purple team SOC analyst, by learning how to investigate incidents from different attack techniques, and analyzing context across a multitude of log sources. 
+This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red Team penetration testing tool in a isolated virtual network environment with Kali Linux attacker machine and Windows 11 victim. The techniques included were Encoded Powershell T1059.001, Registry Run Key Persistence T1547.001, Scheduled Task Persistence T1053.005, and SMB Password Guessing T1110. All endpoint based technoques were performed from PowerShell on the Windows 11 virtual machine, with the exception of SMB password guessing activity was generated remontely by Kali. The detection set-up was configured on the Windows 11 VM with SPLUNK Enterprises Open Telemetry Collector and HTTP Event Collector (HEC) to forward Windows Sysmon, Windows Security, and Powershell Script Blocking logs to the reciever to be stored and indexed. With SPLUNKs Search Processing Language (SPL), several detection models with field extraction, timestamping, filtering, and contextual enrichment. The models started from broad searches to verify log ingestion before refining the detection logic to a fully functional alert. Important fields such as process GUID, parent image, user accounts, source IPs, and registry paths, along with additional contextual evidence to correlate events and construct a process chain. Reliability and effectiveness of the detection rules were evaluated through cross source validation with Sysmon, Windows Security, and PowerShell logs. The finalized detections were consolidated into panels on SPLUNKs dashboard for live detection and visualization. This project helps in understanding the role of a purple team SOC analyst, by learning how to investigate incidents from different attack techniques, and analyzing context across a multitude of log sources. 
+
+___
 
 
-Objectives:
+**Objectives:**
 
 Build an isolated environment with Kali Linux and Windows and SPLUNK Enterprise SIEM.
 
@@ -34,16 +36,6 @@ Correlate multiple Windows events and telemetry sources to reconstruct attack ac
 
 - Document configuration issues, troubleshooting steps, detection logic, and lessons learned throughout the project.
 
-
-What parent/child process relationships indicate suspicious execution?
-What network activity does an attack generate?
-Can I find the activity in Splunk?
-Can I turn what I observed into an SPL detection?
-Can I rerun the attack and prove the detection works?
-How would I reduce false positives without missing the attack?
-
-That is exactly what makes this a purple-team project.
-
 The red-team side generates the behavior.
 
 The blue-team side observes and detects it.
@@ -52,7 +44,18 @@ The purple-team part is the feedback loop between the two.
 
 _____
 
-## STAGE 1: FOUNDATION
+## STAGE 1: FOUNDATION / LAB ENVIRONMENT SET-UP 
+
+**Objectives:**
+
+Build the Windows 11 victim VM
+Build the Kali Linux attacker VM
+Configure the UTM virtual network
+Verify VM connectivity
+Establish clear attacker/victim roles
+Create a clean baseline/checkpoint for recovery
+Prepare the environment for later logging, attack simulation, and Splunk integration
+
 
 
 VM IP ADDRESSES:
@@ -79,7 +82,20 @@ ____
 
 ## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION
 
+
 ____
+
+**Objectives:**
+
+1.Install Sysmon on the Windows 11 victim.
+2.Create and apply a Sysmon configuration.
+3.Enable process creation and other useful endpoint telemetry.
+4.Verify Sysmon is running correctly.
+5.Generate test activity such as launching Notepad.
+6.Locate the corresponding Sysmon events in Event Viewer.
+7.Learn important fields such as Image, CommandLine, ProcessGuid, ParentImage, and User.
+
+___
 
 <img width="748" height="253" alt="Screenshot 2026-09-05 at 4 25 46 PM" src="https://github.com/user-attachments/assets/fed7aa21-77c5-4901-9513-a20878c275cf" />
 
@@ -221,13 +237,20 @@ ProcessGuid
 
   ## STAGE 3: SPLUNK INGESTION - SPLUNK OPEN TELEMENTRY COLLECTOR CONFIGURATION
 
-Splunk’s current documentation says the Universal Forwarder can run on Windows 11 ARM under Prism x64 emulation only on a best-effort basis, and specifically says Windows Event Log collection is unsupported/not validated in that configuration. Since Sysmon Event Logs are the foundation of this project, I don’t want us building on an unreliable ingestion method
+Splunk’s current documentation says the Universal Forwarder can run on Windows 11 ARM under Prism x64 emulation only on a best-effort basis, and specifically says Windows Event Log collection is unsupported/not validated in that configuration. Since Sysmon Event Logs are the foundation of this project, I don’t want to build on an unreliable ingestion method
 
 Splunk Open Telementry Ingester - Supports Windoes 11 - ARM 64
-
-
 Splunk token creation and HTTP Event Collector
 
+1. Install the Splunk OpenTelemetry Collector on Windows.
+2. Configure collection of Sysmon events.
+3. Configure collection of Windows Security events.
+4. Configure collection of PowerShell Operational events.
+5. Configure Splunk HTTP Event Collector (HEC).
+6. Create and use the purple_team_lab Splunk index.
+7. Verify connectivity between the Windows VM and Splunk.
+8. Confirm Windows telemetry successfully reaches Splunk.
+9. Troubleshoot collector, HEC, index, and forwarding issues.
 
 
 <img width="805" height="582" alt="Screenshot 2026-09-06 at 3 10 09 PM" src="https://github.com/user-attachments/assets/8abd62ed-a860-43a0-b00b-9b773f557f45" />
@@ -300,9 +323,20 @@ Confirming Windows Powershell Events are reaching Splunk Recieving Host
 
 <img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
 
- ## Stage 4: Building the baseline for normal activity: Understanding what legitiamte activity looks like 
+ ## STAGE 4: BUILDING BASELINE FOR NORMAL ACTIVITY 
  
 Understand normal behavior → introduce adversary behavior → identify meaningful differences → build detection logic around those differences. 
+
+**Objectives:**
+
+1. Generate normal Windows process activity.
+2. Execute normal PowerShell commands.
+3. Launch applications such as Notepad and Calculator.
+4. Generate cmd.exe activity with commands such as whoami and hostname.
+5. Generate normal DNS and network activity.
+6. Observe normal parent-child process relationships.
+7. Establish baseline behavior for comparison with later attacks.
+8. Practice reconstructing process ancestry using Process GUIDs.
 
 ___
 <img width="1280" height="365" alt="Screenshot 2026-09-12 at 8 59 23 AM" src="https://github.com/user-attachments/assets/065b3e0b-7a10-4922-a4b7-b28e3250e41a" />
@@ -313,6 +347,8 @@ Configured the agent YAML file and changed the index purple_team_lab because the
 
 ___
 
+**Problems Encountered/Troubleshoooting:**
+
 Edited the HTTP Event Collector and reassigned the index so the token would validate after initial failure
 
 <img width="1096" height="352" alt="Screenshot 2026-09-12 at 10 22 30 AM" src="https://github.com/user-attachments/assets/f3e96e9d-ea80-4bc5-940d-dafd5eee9021" />
@@ -320,7 +356,7 @@ Edited the HTTP Event Collector and reassigned the index so the token would vali
 
 <img width="1427" height="276" alt="Screenshot 2026-09-12 at 10 21 12 AM" src="https://github.com/user-attachments/assets/96f6074c-c1ee-4c38-9d74-38c5e9e55657" />
 
-Fixed: 
+Resolved: 
 
 <img width="1101" height="180" alt="Screenshot 2026-09-12 at 10 23 03 AM" src="https://github.com/user-attachments/assets/4f83d632-ae1a-4ace-87b1-6e1b39c118ed" />
 
@@ -365,7 +401,7 @@ Beginning phase of establishing baseline events in splunk before replacing _raw 
 
 _____
 
-Normal Activity Documentation:
+**Normal Activity Documentation:**
 
 Command execution: Notepad.exe - 
 
@@ -398,7 +434,7 @@ Sysmon Network Event 3
 ___
 
 
-Indentifiers for correlating processes:
+**Identifiers for correlating processes:**
 
 PID
 = useful locally and short-term
@@ -429,7 +465,17 @@ And this is precisely why we baseline process trees before Atomic Red Team: Afte
 
 ## STAGE 5 - Atomic Red Team Installation and ATTACK SIM 
 
-Objective: 
+**Objectives:**
+
+1. Install and configure Atomic Red Team.
+2. Inspect the T1059.001 Atomic tests before execution.
+3. Execute a controlled encoded PowerShell test.
+4. Identify the encoded PowerShell process in Sysmon.
+5. Examine the PowerShell command line and -EncodedCommand/-e behavior.
+6. Reconstruct the parent-child process chain.
+7. Decode the Base64 payload safely without executing it.
+8. Locate corresponding PowerShell 4104 telemetry.
+9. Understand how malicious PowerShell behavior may appear in endpoint logs.
 
 Select ATT&CK technique
         ↓
