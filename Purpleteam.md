@@ -4,7 +4,13 @@
 
 Project Overview: 
 
-This home lab project was developed to simulate MITRE ATTACK TECHNIQUES by utilizing Atomic Red in a virtual network environment. This set-up was designed using SPLUNKs open telemetry collector service to forward the Windows sysmon and security logs to the indexer. Using SPLUNKs built-in SPL command-line, I built detections models and tested their reliability and effective by validating other log sources. I set-up It uses SPLUNK open telemetry collector to forward  SPLUNK enterprise and open telemetry collector to forward Windows Sysmon 
+This home lab project was to developed to simulate MITRE ATTACK TECHNIQUES by utilizing the Atomic Red penetration testing tool in a virtual network environment with Kali Linux and Windows 11. The techniques used were encoded powershell T1059.001, Registry Run Key Persistence T1547.001, T1053.005, T1110 This set-up was designed using SPLUNKs open telemetry collector service to forward the Windows sysmon and security logs to the indexer. With SPLUNKs built-in SPL command-line, several detection models were created against the MITRE ATTACK types. From the Sysmon events logs, I gathered the important fields along with additional context to correlate events and build process chain  to enrich Reliability and effectiveness of the detection rules were tested through cross source validation and consolidated the panels into SPLUNKs dashboard for live detection and visualization. 
+
+
+The goal of this project is to teach m aids on learning how to think like a SOC Analyst, its about using context to correlate logs to illustrate chain-process trees. 
+
+
+It uses SPLUNK open telemetry collector to forward  SPLUNK enterprise and open telemetry collector to forward Windows Sysmon
 
 
 
