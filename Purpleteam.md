@@ -490,13 +490,13 @@ File was removed again and quarantined by the Windows Security Defender. This pr
 
 ____
 
-Based on the output the T1059.001.yaml already exists, but Microsoft Defender is blocking PowerShell from reading it. So I had to apply a temporary exclusion for this technique folder. 
+Based on the output the T1059.001.yaml already exists, but Microsoft Defender is blocking PowerShell from reading it. I had to apply a temporary exclusion for this technique folder. 
 
 <img width="2048" height="431" alt="Screenshot 2026-09-18 at 12 24 54 PM" src="https://github.com/user-attachments/assets/36a68142-7d03-457e-81d5-6caaa863d21a" />
 
 Microsoft documents Add-MpPreference -ExclusionPath as excluding the specified file or folder from Defender's scheduled and real-time scanning. 
 
-Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot I successfully accessed the details from the T1059.001 definition. 
+Resolved: Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot, I successfully accessed the details from the T1059.001 definition. 
 
 ___
 
@@ -509,25 +509,23 @@ ____
 ___
 
 Inspected test 17 and verified prerequisites
+
 <img width="1115" height="541" alt="Screenshot 2026-09-18 at 1 07 45 PM" src="https://github.com/user-attachments/assets/cb079294-7f43-45fa-adb4-7a506c937fdf" />
 
 Logged the date and time prior to execution of the attack. 
 
-
-
 Investigating powershell activity from splunk otel collector ingestion...
 
-Process Chain:
+**Process Chain:**
 
 
 Parent Process: powershell.exe {520a07f6-6b70-6aa5-b100-000000000d00}
 
-                                           ⬇️
+ ↓
 
 Process GUID: cmd.exe  /c powershell.exe -e  {520a07f6-70af-6aad-fa0a-000000000d00} - this execution launches both conhost and the powershell encoded command 
                      
-
-
+ ↓
                      
 Parent Image: conhost.exe:                                             
 Process GUID: {520a07f6-70b0-6aad-fb0a-000000000d00}:                  
@@ -535,6 +533,7 @@ Normal supporting process content console window host created
 by cmd.exe, provides the console interface for command line            
 programs (cmd).                      
 
+ ↓
 
 Parent Image: powershell.exe 
 Process GUID: {520a07f6-70b0-6aad-fc0a-000000000d00}
@@ -602,7 +601,7 @@ For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTA
 
 Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
 
-Step #1; Identifying the extracted field names from SPLUNK: 
+Step #1: Identifying the extracted field names from SPLUNK: 
 
 The event_data field was used to build the detection rules and organize the elements in table format.
 
@@ -633,7 +632,7 @@ Step #3: Rerunning adversary simulation
 Re-running Atomic Red to test newly configured detection rule with timestamp
 <img width="1110" height="521" alt="Screenshot 2026-09-21 at 6 36 36 PM" src="https://github.com/user-attachments/assets/08d9c0da-45ee-43bc-91d2-ef7bca3cb33f" />
 
-Step #4: detection automatically identifies the new execution.
+Step #4: Detecting Executions
 
 The SPL rule successfully detected the encoded powershell process including significant fields.
 
@@ -657,7 +656,7 @@ Testing for detection rule for false positives by initiating a Write-Ouput proce
 ____
 
 
-Validating detection configuration by using paramter variations of encoded powershell.
+Step #6: Validating detection configuration by using parameter variations of encoded powershell.
 
 <img width="1120" height="220" alt="Screenshot 2026-09-22 at 10 58 36 PM" src="https://github.com/user-attachments/assets/1ec98860-01d1-4116-b12a-1d1d5b5a4a50" />
 
@@ -669,7 +668,7 @@ ____
 
 Sysmon used to detect the suspicious process → Powershell 4104 reveals the powershell script being executed
 
-Conducting cross-checking on Windows Powershell Events 
+Step #7: Conducting cross-checking on Windows Powershell Events 
 
 <img width="905" height="171" alt="Screenshot 2026-09-23 at 7 25 39 PM" src="https://github.com/user-attachments/assets/04c83684-e9c8-499a-80ea-84600571aafe" />
 
@@ -678,11 +677,9 @@ Conducting cross-checking on Windows Powershell Events
 
 <img width="739" height="113" alt="Screenshot 2026-09-23 at 7 23 43 PM" src="https://github.com/user-attachments/assets/61f103f3-78d9-464b-9e86-0ee1dc442f77" />
 
-Improving Detection by impplementing Parent Process Context 
+Step #8: Improving Detection by implementing Parent Process Context 
 
-My goal is the let the alert show the parent but not only limited to cmd.exe in the previous example because endcoded powershell can be launched by something else.
-
-This add-on allows the me to detect processes initiated by various parent images that could also potentially star-up powershell scripts, other than cmd.exe. 
+My goal is the let the alert show the parent but not only limited to cmd.exe in the previous example because encoded powershell can be launched by something else. This add-on allows the me to detect processes initiated by various parent images that could also potentially star-up powershell scripts, other than cmd.exe. 
 
 
 <img width="1026" height="425" alt="Screenshot 2026-09-23 at 7 43 15 PM" src="https://github.com/user-attachments/assets/5fa953bc-7106-4b6a-aea2-3fa07ab819ed" />
@@ -781,7 +778,7 @@ Appending registry event collection to the sysmon.xml file
 Confirming registry event appears in the updated configuration 
 <img width="845" height="416" alt="Screenshot 2026-09-26 at 11 35 15 AM" src="https://github.com/user-attachments/assets/1b81cb9d-d6e6-4ed9-849e-fb5ddd7c6a83" />
 
-Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works 
+Step #3: Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works 
 
 <img width="1113" height="273" alt="Screenshot 2026-09-26 at 11 39 34 AM" src="https://github.com/user-attachments/assets/98930160-771d-4245-a9e6-b62625f6b8cd" />
 
