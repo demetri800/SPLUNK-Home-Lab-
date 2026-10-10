@@ -636,7 +636,7 @@ Step #7: Conducting cross-checking on Windows Powershell Events
 
 Step #8: Improving Detection by implementing Parent Process Context 
 
-My goal is the let the alert show the parent but not only limited to cmd.exe in the previous example because encoded powershell can be launched by something else. This add-on allows the me to detect processes initiated by various parent images that could also potentially star-up powershell scripts, other than cmd.exe. 
+My goal is the let the alert show the parent, not limited to searching only by cmd.exe in the previous example. This is because encoded powershell can be launched by something else. This allows detections to show processes initiated by various parent images that could also potentially start-up powershell scripts, other than cmd.exe. A useful detection explains what it detects, why it matters, how it was tested, and how an analyst should investigate it.
 
 
 <img width="1026" height="425" alt="Screenshot 2026-09-23 at 7 43 15 PM" src="https://github.com/user-attachments/assets/5fa953bc-7106-4b6a-aea2-3fa07ab819ed" />
@@ -645,15 +645,20 @@ My goal is the let the alert show the parent but not only limited to cmd.exe in 
 <img width="1415" height="90" alt="Screenshot 2026-09-23 at 7 58 18 PM" src="https://github.com/user-attachments/assets/6a7d4d19-9b49-4711-ae0f-80f3b05f4d83" />
 
 
-
-A useful detection explains what it detects, why it matters, how it was tested, and how an analyst should investigate it.
-
 <img width="787" height="208" alt="Screenshot 2026-09-23 at 8 09 24 PM" src="https://github.com/user-attachments/assets/f5f00c6c-f7ac-44c4-ad29-f5bd64ba742c" />
 
 <img width="566" height="68" alt="Screenshot 2026-09-23 at 8 09 47 PM" src="https://github.com/user-attachments/assets/2d51f818-ea4e-419e-86df-f1deb9db8ead" />
 
 
 ## STAGE 7: REGISTRY RUN-KEY PERSISTANCE 
+
+**Summary:**
+
+This stage focused on simulating Registry Run Key persistence using Atomic Red Team and detecting the resulting registry modifications 
+in Splunk. Sysmon Event ID 13 was used to identify the value change, and the responsible process was correlated through its 
+ProcessGuid.
+
+___
 
 **Objectives:**
 
@@ -670,23 +675,22 @@ A useful detection explains what it detects, why it matters, how it was tested, 
 11. Clean up the Atomic registry artifact.
 12. Document false-positive and investigation considerations.
 
-Simulate a persistence mechanism where an attacker places a command or executable path in a Windows autorun registry location so it can execute when the user logs on. Atomic Red Team currently lists Test #1, “Reg Key Run,” which adds an Atomic Red Team value under the current user's Run key and provides a cleanup command afterward
+____
 
 
-Step #1: Verfiy Sysmon registry event collection 
+**Step #1: Verfiy Sysmon registry event collection & append registry event collection to the sysmon.xml file:**
 
 Event 12: registry key/value create or delete
 Event 13: registry value set
 Event 14: registry key/value rename
 
-
- Appending registry event collection to the sysmon.xml file
 <img width="637" height="378" alt="Screenshot 2026-09-26 at 11 33 37 AM" src="https://github.com/user-attachments/assets/53ee81bd-4fe7-46c9-b56b-bd84a978644c" />
 
-Step #2: Confirming registry event appears in the updated configuration 
+**Step #2: Confirming registry event appears in the updated configuration**
+
 <img width="845" height="416" alt="Screenshot 2026-09-26 at 11 35 15 AM" src="https://github.com/user-attachments/assets/1b81cb9d-d6e6-4ed9-849e-fb5ddd7c6a83" />
 
-Step #3: Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works 
+**Step #3: Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works**
 
 <img width="1113" height="273" alt="Screenshot 2026-09-26 at 11 39 34 AM" src="https://github.com/user-attachments/assets/98930160-771d-4245-a9e6-b62625f6b8cd" />
 
@@ -715,15 +719,18 @@ User
 
 <img width="1430" height="637" alt="Screenshot 2026-09-26 at 12 28 01 PM" src="https://github.com/user-attachments/assets/f9c8beca-fcaf-45e5-86c9-89b0367aa6f0" />
 
-Step #4: Atomic Red MITRE ATTACK T1547.001 was performed, logged by Sysmon, and ingested into SPLUNK. 
+___
+
+**Step #4: Atomic Red MITRE ATTACK T1547.001 was performed, logged by Sysmon, and ingested into SPLUNK.**
 
 <img width="1413" height="539" alt="Screenshot 2026-09-26 at 12 51 41 PM" src="https://github.com/user-attachments/assets/67939f53-2163-43fe-8e22-4cc90a6ea2fb" />
 
 Process was identified:
 
 reg.exe → modified → HKCU\Software\Microsoft\Windows\CurrentVersion\Run → added "Atomic Red Team" → C:\Path\AtomicRedTeam.exe
+___
 
-Step #5: Correlating Registry back to the process:
+**Step #5: Correlating Registry back to the process:**
 
 Event ID: 1 Sysmon Process creation was recorded with included registry telemetry and process chain details. 
 <img width="1176" height="611" alt="Screenshot 2026-09-26 at 1 31 38 PM" src="https://github.com/user-attachments/assets/4413d680-a751-4a89-a160-21b4e9a4fc1e" />
@@ -731,13 +738,21 @@ Event ID: 1 Sysmon Process creation was recorded with included registry telemetr
 
 parent process: cmd.exe → reg.exe →  HKCU\Software\Microsoft\Windows\CurrentVersion\Run → C:\Path\AtomicRedTeam.exe
 
-Step #6: Cross-Check validating to the Windows Event 4688 logs
+HKCU: Stores configuration settings, colors, environment variables, and preferences specific to the currently logged-in user.
+
+___
+
+**Step #6: Cross-Check validating to the Windows Event 4688 logs**
+
+Sysmon Event 1 →  Security 4688 →  Sysmon Event 13
 
 <img width="1142" height="595" alt="Screenshot 2026-09-26 at 1 38 16 PM" src="https://github.com/user-attachments/assets/07815501-2afd-4095-813f-ddcea7a0480f" />
 
-Confirms that the windows event security log also identified and captured the process creation of the registry key modification. 
+Confirms that the windows event security log also identified and captured the process creation of the registry key modification.
 
-Step #7: Building real dectection against potentially malicious registry key changes   
+____
+
+**Step #7: Building real dectection against potentially malicious registry key changes** 
 
 <img width="1191" height="344" alt="Screenshot 2026-09-26 at 2 07 48 PM" src="https://github.com/user-attachments/assets/0c6211d1-2c0c-49a5-b402-98a8d17d65c7" />
 
@@ -769,48 +784,13 @@ Step #8: Validate and prove legitamite software can also run keys and which may 
 
 <img width="1434" height="647" alt="Screenshot 2026-09-26 at 3 30 43 PM" src="https://github.com/user-attachments/assets/1d785338-96af-4605-9ec3-938f95c6e072" />
 
-Step #9: Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry 
+Step #9: Proving Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry 
 
 <img width="1170" height="469" alt="Screenshot 2026-09-26 at 4 06 49 PM" src="https://github.com/user-attachments/assets/19708e96-f1fa-456f-ba2c-847a825c9555" />
 
 <img width="1385" height="408" alt="Screenshot 2026-09-26 at 4 07 17 PM" src="https://github.com/user-attachments/assets/8a6d21e0-c97e-40aa-b4df-f116bbb95da5" />
 
 <img width="869" height="237" alt="Screenshot 2026-09-27 at 12 27 31 PM" src="https://github.com/user-attachments/assets/5198040e-5ca7-49d1-853b-eac31213d2ff" />
-
-Detection:
-Registry Run Key Persistence
-
-MITRE ATT&CK:
-T1547.001
-
-Data Source:
-Sysmon Event ID 13
-
-Detection Logic:
-Detects registry value writes involving Windows
-CurrentVersion\Run / RunOnce autorun locations.
-
-Important Fields:
-Image
-TargetObject
-Details
-User
-ProcessGuid
-
-Validation:
-Atomic Red Team T1547.001 Test #1
-
-Cross-Source Validation:
-Sysmon Event 1 →  Security 4688 →  Sysmon Event 13
-
-Potential False Positives:
-Legitimate applications installing or updating
-autorun components.
-
-Investigation:
-Determine what process made the change, what executable
-was configured, where that executable resides, which user
-performed the modification, and what preceded the action.
 
 
 
