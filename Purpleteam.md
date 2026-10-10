@@ -102,20 +102,6 @@ ___
 
 <img width="776" height="238" alt="Screenshot 2026-09-05 at 4 25 27 PM" src="https://github.com/user-attachments/assets/7b13334e-1116-45ed-a046-bebab973f350" />
 
-Process creation can tell you things such as:
-
-Parent process
-Process path
-Command line
-Process ID
-Process GUID
-User
-File hashes
-Network connections
-DNS queries
-Registry activity
-File creation
-Process access
 
 Step #1: Sysmon Startup Configuration: 
 
