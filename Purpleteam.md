@@ -600,7 +600,7 @@ The SPL rule successfully detected the encoded powershell process including sign
 
 Step #5: Generating harmless powershell activity
 
-Testing for detection rule for false positives by initiating a Write-Ouput process. I performed this by generating benign PowerShell activity. The benign activity did not match.
+Testing detection rule for false positives by initiating a Write-Ouput process. I performed this by generating benign PowerShell activity. The benign activity did not match.
 
 <img width="912" height="220" alt="Screenshot 2026-09-22 at 10 17 08 PM" src="https://github.com/user-attachments/assets/16e3ec05-7b62-40e0-b213-4e7bcf350372" />
 
