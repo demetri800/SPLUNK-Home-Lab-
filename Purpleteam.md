@@ -1096,7 +1096,7 @@ After modifying firewall rules the Kali nmap port scan test was successful
 
 <img width="521" height="164" alt="Screenshot 2026-09-28 at 4 07 57 PM" src="https://github.com/user-attachments/assets/73a944c3-cc03-4a36-ba28-031331b16369" />
 
-Installing smb client on kali and initializing logon sessions
+Installing SMB client on kali and initializing logon sessions
 
 Intentional failure (5x) for brute force detection on Splunk
 
@@ -1265,6 +1265,8 @@ __
 
 <img width="688" height="266" alt="Screenshot 2026-10-06 at 11 36 31 PM" src="https://github.com/user-attachments/assets/8bfb46af-d2dc-4d5d-98fe-5331741c5149" />
 
-**Conclusion:**
+**Project Conclusion:**
 
-The purple team home lab was successfully completed with a functioning telemetry pipeline, multiple MITRE ATT&CK-based detections, cross-source validation, event correlation, and a final Splunk dashboard. The project demonstrated practical skills in adversary simulation, SOC investigation, detection engineering, troubleshooting, and security monitoring.
+The purple team home lab was successfully completed with a functioning telemetry pipeline, multiple MITRE ATT&CK-based detections, cross-source validation, event correlation, and a final SPLUNK dashboard. The project demonstrated practical skills in adversary simulation, SOC investigation, detection engineering, troubleshooting, and security monitoring. The configuration phase was very interesting as I was building the SOC lab virtual environment and setting up the log ingestion with SPLUNK OTEL collector and HEC through PowerShell. I saw this as a great way to understand the preliminary processes involved to create a complete detection/monitoring environment. Being introduced to Atomic Team Red and MITRE ATTACK Framework was a huge part of this project as well. By learning about the different attack techniques, I can better identify suspicious events and gather valuable intelligence from context to construct patterns and timelines. In this project, one of the main core lessons to me was learning where to start in an investigation. As I progressed through this lab while building detection model, I began asking myself questions: "When did this event occur?", "What was the action being performed?", "What machine did this event occur on?", "Is this activity normal behavior?", "Was the action performed remotely?" "Is this action harmful?". These are all important steps to learn as an analyst and facilitates the approach to daily monitoring and alerting. 
+I have also come to recognize the fact that most of detections DO NOT confirm malicious actions. My success as a SOC Analyst depends on my ability examine the alert and to find any evidence that supports or refutes that a incident or compromise may have occurred. Another interesting part of this project was taking on the roles of both blue team and read team throughout the lab. It was a great experience to apply some of the offensive strategies from MITRE ATTACK and Atomic Red, while simultaneously developing and enriching detections from SPLUNK catch potentially malicious behavior. Overall this project was very educational and offered me exposure to widely used SIEM platforms like SPLUNK along with PowerShell and Linux, which really helps to enhance my technical expertise.
+
