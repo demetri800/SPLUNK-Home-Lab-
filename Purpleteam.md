@@ -102,13 +102,7 @@ ___
 
 <img width="776" height="238" alt="Screenshot 2026-09-05 at 4 25 27 PM" src="https://github.com/user-attachments/assets/7b13334e-1116-45ed-a046-bebab973f350" />
 
-Process creation
-
-cmd.exe
-   ↓
-powershell.exe
-
-It can tell you things such as:
+Process creation can tell you things such as:
 
 Parent process
 Process path
@@ -122,24 +116,6 @@ DNS queries
 Registry activity
 File creation
 Process access
-
-That means instead of only seeing:
-
-PowerShell ran
-
-you may be able to reconstruct:
-
-WINWORD.EXE
-      ↓
-powershell.exe
-      ↓
-encoded command
-      ↓
-network connection
-      ↓
-downloaded file
-      ↓
-new process
 
 Step #1: Sysmon Startup Configuration: 
 
@@ -160,7 +136,7 @@ Show me everything in these categories so I can learn what normal activity looks
 <DNSQuery onmatch="exclude" />
 
 
-Testing Process-Create Configurations: 
+Step #2: Testing Process-Create Configurations: 
 
 <img width="606" height="178" alt="Screenshot 2026-09-05 at 4 44 02 PM" src="https://github.com/user-attachments/assets/b3bd5f20-c3fd-4f01-8f63-cbcc75864d3d" />
 
@@ -170,7 +146,7 @@ Testing Process-Create Configurations:
 
 
 
-Sysmon Notepad Process execution test-run: 
+Step #3: Sysmon Notepad Process execution test-run: 
 
 <img width="623" height="441" alt="Screenshot 2026-09-05 at 5 09 22 PM" src="https://github.com/user-attachments/assets/a083ba9e-a09c-49dc-85a9-3e8821668746" />
 
@@ -183,7 +159,7 @@ powershell.exe
 rundll32.exe
 ___
 
-Testing DNS and Network Connection Sysmon Configuraton:
+Step #4: Testing DNS and Network Connection Sysmon Configuration:
 __
 
 <img width="803" height="258" alt="Screenshot 2026-09-05 at 5 18 59 PM" src="https://github.com/user-attachments/assets/1401318e-ce8e-4120-ba0f-494f47c0c82f" />
@@ -206,6 +182,8 @@ Splunk’s current documentation says the Universal Forwarder can run on Windows
 Splunk Open Telementry Ingester - Supports Windoes 11 - ARM 64
 Splunk token creation and HTTP Event Collector
 
+**Objectives:**
+
 1. Install the Splunk OpenTelemetry Collector on Windows.
 2. Configure collection of Sysmon events.
 3. Configure collection of Windows Security events.
@@ -223,7 +201,7 @@ Splunk token creation and HTTP Event Collector
 
 <img width="662" height="259" alt="Screenshot 2026-09-06 at 3 09 07 PM" src="https://github.com/user-attachments/assets/69d3aea5-34a8-4886-98f8-e52a8626709e" />
 
-Created the Authorization Token for the Collector to verify identity and ingest the sysmon logs.
+Step #1: Created the Authorization Token for the Collector to verify identity and ingest the sysmon logs.
 
 <img width="760" height="117" alt="Screenshot 2026-09-06 at 3 21 38 PM" src="https://github.com/user-attachments/assets/00495f27-ec9a-49e4-8fba-62f403a2fc24" />
 
@@ -242,14 +220,14 @@ ____
 
 
 
-Testing Splunk Ingestion from Windows Powershell initiated NetConnection and notepad execution:
+Step #2: Testing Splunk Ingestion from Windows Powershell initiated NetConnection and notepad execution:
 
 _____
 
 <img width="864" height="456" alt="Screenshot 2026-09-06 at 6 18 13 PM" src="https://github.com/user-attachments/assets/a09af5be-43fc-45b8-9edc-5be5f2aa630b" />
 
 
-Copying audit.yaml open telementry configuration for backup
+Step #3: Copying audit.yaml open telementry configuration for backup
 
 ____
 
@@ -257,24 +235,22 @@ ____
 
 ____
 
-Enabling script blocking from Powershell to tell us what powershell actually executed.
+Step #4: Enabling script blocking from Powershell to tell us what powershell actually executed.
 
 ___
+
 <img width="1151" height="280" alt="Screenshot 2026-09-07 at 4 13 07 PM" src="https://github.com/user-attachments/assets/b75effe2-6610-4221-923c-d5f1dc4327c9" />
 
 
-Updated the agent configuration to send windows security logs 
+Step #5: Updated the agent configuration to send windows security logs and validated configuration of the agent yaml file
 
 <img width="844" height="510" alt="Screenshot 2026-09-07 at 4 26 10 PM" src="https://github.com/user-attachments/assets/d4808a75-d17d-4c06-9ad0-199fbe4de162" />
-
-
-Validated configuration of the agent yaml file
-
+ 
 <img width="1186" height="201" alt="Screenshot 2026-09-07 at 4 27 26 PM" src="https://github.com/user-attachments/assets/de2d7ad9-37e6-4ed0-83c6-cad3e8b0d13c" />
 
 ___
 
-Creating a Powershell Event to Test Ingestion
+Step #6: Creating a Powershell Event to Test Ingestion
 
 ___
 
@@ -283,7 +259,7 @@ ___
 
 
 
-Confirming Windows Powershell Events are reaching Splunk Recieving Host
+Step #7: Confirming Windows Powershell Events are reaching Splunk Recieving Host
 
 <img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
 
@@ -303,9 +279,10 @@ Understand normal behavior → introduce adversary behavior → identify meaning
 8. Practice reconstructing process ancestry using Process GUIDs.
 
 ___
-<img width="1280" height="365" alt="Screenshot 2026-09-12 at 8 59 23 AM" src="https://github.com/user-attachments/assets/065b3e0b-7a10-4922-a4b7-b28e3250e41a" />
 
-Configured the agent YAML file and changed the index purple_team_lab because the windows_lab index was occupied from a past project.
+Step #1:  Configured the agent YAML file and changed the index purple_team_lab because the windows_lab index was occupied from a past project.
+
+<img width="1280" height="365" alt="Screenshot 2026-09-12 at 8 59 23 AM" src="https://github.com/user-attachments/assets/065b3e0b-7a10-4922-a4b7-b28e3250e41a" />
 
 <img width="845" height="513" alt="Screenshot 2026-09-12 at 10 06 26 AM" src="https://github.com/user-attachments/assets/32ea9b70-b835-49cc-a466-7a0bb3d7a3b6" />
 
@@ -329,7 +306,7 @@ Confirmation from Splunk that it ingested the test event successfully
 
 <img width="1374" height="617" alt="Screenshot 2026-09-12 at 10 33 56 AM" src="https://github.com/user-attachments/assets/bbdbc892-7dd1-4725-a997-f97a5c62c6b9" />
 
-Creating a normal baseline
+Step #2: Creating a normal baseline
 
 <img width="758" height="586" alt="Screenshot 2026-09-12 at 11 24 53 AM" src="https://github.com/user-attachments/assets/a6b1b81c-3a95-4283-865c-35a7c86af0a4" />
 
@@ -349,7 +326,7 @@ Process ID cmd.exe = 0x2344 corresponds with the event details found in the whoa
 <img width="692" height="181" alt="Screenshot 2026-09-12 at 12 04 18 PM" src="https://github.com/user-attachments/assets/131c83fb-352c-4bfc-95ab-03662187648d" />
 
 
-Correlating DNS Query and Test Connection 
+Step #4: Correlating DNS Query and Test Connection 
 
 ____
 <img width="720" height="417" alt="Screenshot 2026-09-12 at 12 45 11 PM" src="https://github.com/user-attachments/assets/624f042a-8326-42f2-a0cf-88d57bf244d9" />
@@ -453,10 +430,11 @@ Splunk receives it
         ↓
 Compare it against your Stage 4 baseline
 
-Installed Atmomic Red Team and verified installation
+Step #1: Installed Atomic Red Team and verified installation
+
 <img width="1091" height="454" alt="Screenshot 2026-09-15 at 8 01 59 PM" src="https://github.com/user-attachments/assets/7ca673c9-be09-4f50-be2d-d7e7a247ef84" />
 
-_____
+
 
 <img width="1022" height="185" alt="Screenshot 2026-09-15 at 8 03 00 PM" src="https://github.com/user-attachments/assets/efe806f7-7490-40db-a821-59afb1a38d9f" />
 
@@ -496,7 +474,7 @@ Based on the output the T1059.001.yaml already exists, but Microsoft Defender is
 
 Microsoft documents Add-MpPreference -ExclusionPath as excluding the specified file or folder from Defender's scheduled and real-time scanning. 
 
-Resolved: Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot, I successfully accessed the details from the T1059.001 definition. 
+Step #2/Resolution: Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot, I successfully accessed the details from the T1059.001 definition. 
 
 ___
 
@@ -508,13 +486,12 @@ ____
 
 ___
 
-Inspected test 17 and verified prerequisites
+Step #3: Inspected test 17 and verified prerequisites
 
 <img width="1115" height="541" alt="Screenshot 2026-09-18 at 1 07 45 PM" src="https://github.com/user-attachments/assets/cb079294-7f43-45fa-adb4-7a506c937fdf" />
 
-Logged the date and time prior to execution of the attack. 
+Step #4: Investigating PowerShell activity from Splunk Otel collector ingestion
 
-Investigating powershell activity from splunk otel collector ingestion...
 
 **Process Chain:**
 
@@ -556,7 +533,7 @@ Decoded: & (gcm ('ie{0}' -f 'x')) ("Wr"+"it"+"e-H"+"ost 'H"+"el"+"lo, fr"+"om P"
 
 <img width="1132" height="546" alt="Screenshot 2026-09-19 at 11 29 39 AM" src="https://github.com/user-attachments/assets/897ec2f2-65bc-48af-a330-3601c7af216e" />
 
-Conducted Cross source validation to correlate the sysmon with the 4688 windows security event. 
+Step #5: Conducted Cross source validation to correlate the sysmon with the 4688 windows security event. 
 
 
 The snapshots below reveal how the powershell parent process launched the cmd.exe prior to the encoded powershell executable from  cmd.exe
@@ -599,7 +576,15 @@ For this attack simulation, Atomic Team was used to emulate the T1059 MITRE ATTA
 7. Cross-reference Sysmon Event 1 with PowerShell Event 4104.
 8. Add MITRE ATT&CK and analyst-friendly contextual fiel
 
-Building SPL detection rules for encoded powershell processes and its variations. I am also testing the rule by re running Atomic Red to validate its detection capabilities and improving the rule by measure false positives. 
+
+Detection Name:
+Encoded PowerShell Execution
+
+MITRE ATT&CK:
+T1059.001 — PowerShell
+
+Data Source:
+Sysmon Event ID 1
 
 Step #1: Identifying the extracted field names from SPLUNK: 
 
@@ -695,59 +680,10 @@ A useful detection explains what it detects, why it matters, how it was tested, 
 
 <img width="566" height="68" alt="Screenshot 2026-09-23 at 8 09 47 PM" src="https://github.com/user-attachments/assets/2d51f818-ea4e-419e-86df-f1deb9db8ead" />
 
-Detection Name:
-Encoded PowerShell Execution
-
-MITRE ATT&CK:
-T1059.001 — PowerShell
-
-Data Source:
-Sysmon Event ID 1
-
-Objective:
-Identify PowerShell processes launched with encoded-command
-arguments.
-
-Detection Logic:
-Identify powershell.exe process creation events where the
-command line contains variations of -EncodedCommand such as
--e, -enc, or -EncodedCommand.
-
-Primary Fields:
-Image
-CommandLine
-ParentImage
-ParentCommandLine
-User
-ProcessGuid
-ParentProcessGuid
-
-Validation:
-Atomic Red Team T1059.001 Test #17
-
-Result:
-Successfully detected Atomic execution.
-
-Negative Testing:
-Normal PowerShell commands such as Get-Date and Get-Process
-did not trigger the detection.
-
-** Potential False Positives **
-Legitimate administrative automation or management software
-that uses encoded PowerShell.
-
-Investigation Guidance:
-Review parent process, user, host, decoded command content,
-PowerShell 4104 telemetry, and subsequent process/network
-activity.
-
-Detection Status:
-Validated
-
 
 ## STAGE 7: REGISTRY RUN-KEY PERSISTANCE 
 
-**Objectives**
+**Objectives:**
 
 1. Enable Sysmon registry-event collection.
 2. Generate normal registry activity as a baseline.
@@ -772,10 +708,10 @@ Event 13: registry value set
 Event 14: registry key/value rename
 
 
-Appending registry event collection to the sysmon.xml file
+ Appending registry event collection to the sysmon.xml file
 <img width="637" height="378" alt="Screenshot 2026-09-26 at 11 33 37 AM" src="https://github.com/user-attachments/assets/53ee81bd-4fe7-46c9-b56b-bd84a978644c" />
 
-Confirming registry event appears in the updated configuration 
+Step #2: Confirming registry event appears in the updated configuration 
 <img width="845" height="416" alt="Screenshot 2026-09-26 at 11 35 15 AM" src="https://github.com/user-attachments/assets/1b81cb9d-d6e6-4ed9-849e-fb5ddd7c6a83" />
 
 Step #3: Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works 
@@ -807,7 +743,7 @@ User
 
 <img width="1430" height="637" alt="Screenshot 2026-09-26 at 12 28 01 PM" src="https://github.com/user-attachments/assets/f9c8beca-fcaf-45e5-86c9-89b0367aa6f0" />
 
-Atomic Red MITRE ATTACK T1547.001 was performed, logged by Sysmon, and ingested into SPLUNK. 
+Step #4: Atomic Red MITRE ATTACK T1547.001 was performed, logged by Sysmon, and ingested into SPLUNK. 
 
 <img width="1413" height="539" alt="Screenshot 2026-09-26 at 12 51 41 PM" src="https://github.com/user-attachments/assets/67939f53-2163-43fe-8e22-4cc90a6ea2fb" />
 
@@ -815,7 +751,7 @@ Process was identified:
 
 reg.exe → modified → HKCU\Software\Microsoft\Windows\CurrentVersion\Run → added "Atomic Red Team" → C:\Path\AtomicRedTeam.exe
 
-Step #8: Correlating Registry back to the process:
+Step #5: Correlating Registry back to the process:
 
 Event ID: 1 Sysmon Process creation was recorded with included registry telemetry and process chain details. 
 <img width="1176" height="611" alt="Screenshot 2026-09-26 at 1 31 38 PM" src="https://github.com/user-attachments/assets/4413d680-a751-4a89-a160-21b4e9a4fc1e" />
@@ -823,13 +759,13 @@ Event ID: 1 Sysmon Process creation was recorded with included registry telemetr
 
 parent process: cmd.exe → reg.exe →  HKCU\Software\Microsoft\Windows\CurrentVersion\Run → C:\Path\AtomicRedTeam.exe
 
-Step #9: Cross-Check validating to the Windows Event 4688 logs
+Step #6: Cross-Check validating to the Windows Event 4688 logs
 
 <img width="1142" height="595" alt="Screenshot 2026-09-26 at 1 38 16 PM" src="https://github.com/user-attachments/assets/07815501-2afd-4095-813f-ddcea7a0480f" />
 
 Confirms that the windows event security log also identified and captured the process creation of the registry key modification. 
 
-Step #10: Building real dectection against potentially malicious registry key changes   
+Step #7: Building real dectection against potentially malicious registry key changes   
 
 <img width="1191" height="344" alt="Screenshot 2026-09-26 at 2 07 48 PM" src="https://github.com/user-attachments/assets/0c6211d1-2c0c-49a5-b402-98a8d17d65c7" />
 
@@ -855,20 +791,17 @@ index=purple_team_lab event_id.id=13 → Examine Sysmon 13 events only
 
 The keys are folders that contain the configuration settings of how your devices system and applications start-up and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistence upon log-on or disable security
 
-Step #11: Validate
-
-Proves that legitamite software can also run keys and which may create instances of false positives 
+Step #8: Validate and prove legitamite software can also run keys and which may create instances of false positives 
 
 <img width="1109" height="98" alt="Screenshot 2026-09-26 at 3 31 11 PM" src="https://github.com/user-attachments/assets/e459304e-e059-4570-9bfe-11903ebf4eaa" />
 
 <img width="1434" height="647" alt="Screenshot 2026-09-26 at 3 30 43 PM" src="https://github.com/user-attachments/assets/1d785338-96af-4605-9ec3-938f95c6e072" />
 
-Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry 
+Step #9: Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry 
 
 <img width="1170" height="469" alt="Screenshot 2026-09-26 at 4 06 49 PM" src="https://github.com/user-attachments/assets/19708e96-f1fa-456f-ba2c-847a825c9555" />
 
 <img width="1385" height="408" alt="Screenshot 2026-09-26 at 4 07 17 PM" src="https://github.com/user-attachments/assets/8a6d21e0-c97e-40aa-b4df-f116bbb95da5" />
-
 
 <img width="869" height="237" alt="Screenshot 2026-09-27 at 12 27 31 PM" src="https://github.com/user-attachments/assets/5198040e-5ca7-49d1-853b-eac31213d2ff" />
 
@@ -927,8 +860,19 @@ performed the modification, and what preceded the action.
 11. Perform benign scheduled-task testing.
 12. Validate the detection through repeated Atomic execution.
 13. Remove the Atomic scheduled tasks after testing.
-    
-Detecting creation of scheduled tasks falling under MITRE ATT&CK T1053.005. We are determining what created the task, what the task executes, the account that triggered it, and its behavior. Upon investigation and acquired context, we develop our SPLUNK detection rules flag processes worth investigating. Lastly, we validate the detection system and its capabilities by cross-checking other log sources to build the evidence-chain. Windows Security Event 4698 is specifically generated when a scheduled task is created, provided the relevant audit policy is enabled. Microsoft also recommends monitoring scheduled-task creation because malware can use tasks for persistence or execution. Task creation in Windows lets you automate programs, scripts, or system commands to run automatically using the built-in Task Scheduler tool.
+
+Detection:
+Scheduled Task Creation
+
+MITRE ATT&CK:
+T1053.005 — Scheduled Task
+
+Primary Data Source:
+Windows Security Event 4698
+
+Supporting Sources:
+Sysmon Event ID 1
+Windows Security Event 4688
 
 Step #1: Enables successful Auditing 
 
@@ -946,7 +890,7 @@ For this stage, I am choosing test #1 - scheduled task startup which creates two
 
 <img width="877" height="354" alt="Screenshot 2026-09-27 at 12 53 28 PM" src="https://github.com/user-attachments/assets/5695aa1d-a6e7-444e-b511-e6d8748b9f02" />
 
-Step#4: Finding the Security 4698 Event in SPLUNK
+Step #2: Finding the Security 4698 Event in SPLUNK
 
 <img width="1440" height="665" alt="Screenshot 2026-09-27 at 2 24 07 PM" src="https://github.com/user-attachments/assets/1c97477c-01f1-41ab-b824-4f02ae1cf3ab" />
 
@@ -981,7 +925,7 @@ ParentProcessId
  <Arguments>...</Arguments> c calc.exe
 
 
-Step #7: Finding the process that created the task
+Step #3: Finding the process that created the task
 
 The following image details the sysmon log event.id 1  
 
@@ -996,10 +940,7 @@ Name of the scheduled task: T1053_005_OnStartup
 cmd.exe /c calc.exe → scheduled task launches cmd.exe, and cmd.exe is told with /c to run calc.exe and then exit.
 
 
-Step #8
-
-
-Confirmation cross source validation was successful with Sysmon even 1, Windows 4688 and 4968 logsources detected the task creation. 
+Step #4: Confirmation cross source validation was successful with Sysmon even 1, Windows 4688 and 4968 log sources detected the task creation. 
 
 Sysmon 1
 
@@ -1035,7 +976,7 @@ TaskContent XML
 reveals trigger + command + principal
 
 
-Step #9: Building Scheduled detection
+Step #5: Building Scheduled detection
 
 This is a broader search that detects all task creation events and organizes events in table format
 
@@ -1050,7 +991,7 @@ index=purple_team_lab event_id.id=4698
 | eval mitre_technique="T1053.005"
 | table _time host SubjectDomainName SubjectUserName detection_name mitre_technique TaskName TaskContent ClientProcessId ParentProcessId
 
-
+Step #6: 
 This part is as an extension of the previous query allowing the detection rule to match the task content with keywords such as powershell, cmd, and rundll32. These are among the more common exploitable services that threats typically use when performing task creation attacks to maintain persistence on a victims machine:
 
 | eval context=case(
@@ -1082,7 +1023,7 @@ Splunk assigns → context = Command shell execution
 
 
 
-Step #10: Peforming Negative Testing
+Step #7: Peforming Negative Testing
 
 
 Creating a harmless scheduled task to prove detection rule functionality
@@ -1095,7 +1036,7 @@ Context fields works as intended and assigns "review task creation" instead of "
 <img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
 
 
-Validated Atomic and the production of new test events:
+Step #8: Validated Atomic and the production of new test events:
 
 <img width="959" height="177" alt="Screenshot 2026-09-28 at 12 54 01 PM" src="https://github.com/user-attachments/assets/8113989b-eae4-4ce1-b644-a93d0b5b78de" />
 
@@ -1106,8 +1047,6 @@ Invoke-AtomicTest T1053.005 -TestNumbers 1
  
 
 <img width="968" height="181" alt="Screenshot 2026-09-28 at 12 57 42 PM" src="https://github.com/user-attachments/assets/61633c2e-76c7-436d-bcd9-f4121ac872e2" />
-
-{Edit Detection Summary} 
 
 Detection:
 Scheduled Task Creation
@@ -1126,23 +1065,8 @@ Detection Objective:
 Identify newly registered scheduled tasks and expose
 their trigger, execution command, account, and creating process.
 
-Validation:
-Atomic Red Team T1053.005 Test #1
 
-Observed behavior:
-schtasks.exe created logon/startup tasks configured
-to execute cmd.exe /c calc.exe.
 
-Potential False Positives:
-Software installers, update agents, administrative
-automation, maintenance jobs, and enterprise management tools.
-
-Investigation:
-Review task name, XML action, arguments, trigger,
-principal, creating account, creating process, and surrounding
-process/network activity.
-
-Kali Network Attack Simulation 
 
 ## STAGE 9: Kali Network Attack Simulation - Brute Forcing
 
