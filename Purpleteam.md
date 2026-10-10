@@ -539,7 +539,6 @@ suspicious branch of the process tree
  
 Analysis chain:
 
-
 Base 64 Encoded powershell: JgAgACgAZwBjAG0AIAAoACcAaQBlAHsAMAB9ACcAIAAtAGYAIAAnAHgAJwApACkAIAAoACIAVwByACIAKwAiAGkAdAAiACsAIgBlAC0ASAAiACsAIgBvAHMAdAAgACcASAAiACsAIgBlAGwAIgArACIAbABvACwAIABmAHIAIgArACIAbwBtACAAUAAiACsAIgBvAHcAIgArACIAZQByAFMAIgArACIAaAAiACsAIgBlAGwAbAAhACcAIgApAA==
 
 Decoded: & (gcm ('ie{0}' -f 'x')) ("Wr"+"it"+"e-H"+"ost 'H"+"el"+"lo, fr"+"om P"+"ow"+"erS"+"h"+"ell!'")
@@ -1074,7 +1073,7 @@ This stage introduced Kali Linux as an external attack source. Nmap was used to 
 KALI-RED01 → Network reconnaissance → WIN-VICTIM01 → SMB authentication attempts → Windows Security 4625 → 
 Splunk → Brute-force-detection
 
-Step #1: Ensuring connectivity between windows and kali machine 
+**Step #1: Ensuring connectivity between windows and kali machine**
 
 <img width="485" height="116" alt="Screenshot 2026-09-28 at 3 11 41 PM" src="https://github.com/user-attachments/assets/f45e40ce-88a4-4371-b956-a2fcfca2fa2f" />
 
@@ -1119,7 +1118,7 @@ Sub-status - 0xc000006a - UserName was correct but the password is wrong
 
 WorkstationName and IP address defines what account/source generated them.
 
-Step #9: Enriching Detection by implemeting a 5 minute window Threshold
+**Step #9: Enriching Detection by implemeting a 5 minute window Threshold**
 
 The following SPL command was built for tracking logon attempts exceeding or equal to five occurring within a five minute timeframe. 
 
@@ -1216,7 +1215,7 @@ A higher-context detection was successfully developed for successful authenticat
 
 ## STAGE #11: FINALIZED SOC DASHBOARD 
 
-Summary:
+**Summary:**
 
 This final stage of my project focuses on consolidating all of the SPL detection model results and developing panels for each of them on the SOC dashboard. For this part, I did perform some minor alterations to the original SPL commands which allowed me to represent the data in different ways. I also configured the dashboard to be interactive, allowing the search results to open in a new tab on-click. 
 
@@ -1237,33 +1236,34 @@ This panel is derived from the stage 5 process of the simulated command and scri
 
 ___
 
-Panel #2: Registry Persistence
+**Panel #2: Registry Persistence**
 
 <img width="1410" height="295" alt="Screenshot 2026-10-06 at 11 32 54 PM" src="https://github.com/user-attachments/assets/7b2603a6-fec4-49ec-bdc0-148a80af9dd9" />
 
 __
 
-Panel #3: Scheduled Task Creation
+**Panel #3: Scheduled Task Creation**
 
 <img width="1404" height="197" alt="Screenshot 2026-10-06 at 11 33 41 PM" src="https://github.com/user-attachments/assets/dfa32b1f-d9ea-4586-bd97-835b8fa00153" />
 
 __
 
-Panel #4: Repeated Failed Network Logons
+**Panel #4: Repeated Failed Network Logons**
 
 <img width="724" height="262" alt="Screenshot 2026-10-06 at 11 35 22 PM" src="https://github.com/user-attachments/assets/8bb70c71-dbe9-4f08-9840-c00c61412e83" />
 
 __
 
-Panel #5: Successful Login Following Repeated Failures
+**Panel #5: Successful Login Following Repeated Failures**
 
 <img width="1413" height="210" alt="Screenshot 2026-10-06 at 11 35 43 PM" src="https://github.com/user-attachments/assets/40bec732-ea8b-4b51-9d25-5bcc6e20e372" />
 
 __
 
-Panel #6: Event Telemetry Overview
+**Panel #6: Event Telemetry Overview**
 
 <img width="688" height="266" alt="Screenshot 2026-10-06 at 11 36 31 PM" src="https://github.com/user-attachments/assets/8bfb46af-d2dc-4d5d-98fe-5331741c5149" />
 
+**Conclusion:**
 
-
+The purple team home lab was successfully completed with a functioning telemetry pipeline, multiple MITRE ATT&CK-based detections, cross-source validation, event correlation, and a final Splunk dashboard. The project demonstrated practical skills in adversary simulation, SOC investigation, detection engineering, troubleshooting, and security monitoring.
