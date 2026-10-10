@@ -82,8 +82,6 @@ ____
 
 ## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION
 
-____
-
 **Objectives:**
 
 1. Install Sysmon on the Windows 11 victim.
