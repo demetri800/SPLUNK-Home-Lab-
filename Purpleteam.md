@@ -1229,27 +1229,27 @@ This final stage of my project focuses on consolidating all of the SPL detection
 5. Consolidate MITRE ATT&CK mappings across the project.
 
 
-**Panel #1: Encoded Powershell**
+**Panel #1: Encoded Powershell T1059.001** 
 
-This panel is derived from the stage 5 process of the simulated command and scripting MITRE TECHNIQUE T1509. 
+
 
 <img width="1398" height="339" alt="Screenshot 2026-10-06 at 11 32 16 PM" src="https://github.com/user-attachments/assets/6b77d22d-b798-41e6-922f-945fdb03b99b" />
 
 ___
 
-**Panel #2: Registry Persistence**
+**Panel #2: Registry Persistence T1547.001** 
 
 <img width="1410" height="295" alt="Screenshot 2026-10-06 at 11 32 54 PM" src="https://github.com/user-attachments/assets/7b2603a6-fec4-49ec-bdc0-148a80af9dd9" />
 
 __
 
-**Panel #3: Scheduled Task Creation**
+**Panel #3: Scheduled Task Creation Persistence T1053.005**
 
 <img width="1404" height="197" alt="Screenshot 2026-10-06 at 11 33 41 PM" src="https://github.com/user-attachments/assets/dfa32b1f-d9ea-4586-bd97-835b8fa00153" />
 
 __
 
-**Panel #4: Repeated Failed Network Logons**
+**Panel #4: Repeated Failed Network Logons - Brute Force Detection T1110**
 
 <img width="724" height="262" alt="Screenshot 2026-10-06 at 11 35 22 PM" src="https://github.com/user-attachments/assets/8bb70c71-dbe9-4f08-9840-c00c61412e83" />
 
@@ -1267,6 +1267,7 @@ __
 
 **Project Conclusion:**
 
-The purple team home lab was successfully completed with a functioning telemetry pipeline, multiple MITRE ATT&CK-based detections, cross-source validation, event correlation, and a final SPLUNK dashboard. The project demonstrated practical skills in adversary simulation, SOC investigation, detection engineering, troubleshooting, and security monitoring. The configuration phase was very interesting as I was building the SOC lab virtual environment and setting up the log ingestion with SPLUNK OTEL collector and HEC through PowerShell. I saw this as a great way to understand the preliminary processes involved to create a complete detection/monitoring environment. Being introduced to Atomic Team Red and MITRE ATTACK Framework was a huge part of this project as well. By learning about the different attack techniques, I can better identify suspicious events and gather valuable intelligence from context to construct patterns and timelines. In this project, one of the main core lessons to me was learning where to start in an investigation. As I progressed through this lab while building detection model, I began asking myself questions: "When did this event occur?", "What was the action being performed?", "What machine did this event occur on?", "Is this activity normal behavior?", "Was the action performed remotely?" "Is this action harmful?". These are all important steps to learn as an analyst and facilitates the approach to daily monitoring and alerting. 
-I have also come to recognize the fact that most of detections DO NOT confirm malicious actions. My success as a SOC Analyst depends on my ability examine the alert and to find any evidence that supports or refutes that a incident or compromise may have occurred. Another interesting part of this project was taking on the roles of both blue team and read team throughout the lab. It was a great experience to apply some of the offensive strategies from MITRE ATTACK and Atomic Red, while simultaneously developing and enriching detections from SPLUNK catch potentially malicious behavior. Overall this project was very educational and offered me exposure to widely used SIEM platforms like SPLUNK along with PowerShell and Linux, which really helps to enhance my technical expertise.
+The purple team home lab was successfully completed with a functioning telemetry pipeline, multiple MITRE ATT&CK-based detections, cross-source validation, event correlation, and a final Splunk dashboard. The project demonstrated practical skills in adversary simulation, SOC investigation, detection engineering, troubleshooting, and security monitoring. The configuration phase was very interesting as I was building the SOC lab virtual environment and setting up log ingestion with the Splunk Otel Collector and HEC through PowerShell. I saw this as a great way to understand the preliminary processes involved in creating a complete detection/monitoring environment. Being introduced to Atomic Red Team and the MITRE ATT&CK framework was a huge part of this project as well. By learning about the different attack techniques, I can better identify suspicious events and gather valuable intelligence from context to construct patterns and timelines. In this project, one of the main lessons for me was learning where to start in an investigation. As I progressed through this lab while building detection models, I began asking myself questions: "When did this event occur?", "What was the action being performed?", "What machine did this event occur on?", "Is this activity normal behavior?", "Was the action performed remotely?", and "Is this action harmful?" These are all important steps to learn as an analyst and facilitate the approach to daily monitoring and alerting. I have also come to recognize the fact a security detection does not necessarily confirm malicious activity. My success as a SOC analyst depends on my ability to examine the alert and find any evidence that supports or refutes whether an incident or compromise may have occurred. Another interesting part of this project was taking on the roles of both blue team and red team throughout the lab. It was a great experience to apply some of the offensive strategies from MITRE ATT&CK and Atomic Red Team while simultaneously developing and enriching detections in Splunk to catch potentially malicious behavior. Overall, this project was very educational and offered me exposure to widely used SIEM platforms like Splunk, along with PowerShell and Linux, which really helped enhance my technical expertise.
+
+
 
