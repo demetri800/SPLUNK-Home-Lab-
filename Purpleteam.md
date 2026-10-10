@@ -574,18 +574,6 @@ Step #1: Identifying the extracted field names from SPLUNK:
 
 The event_data field was used to build the detection rules and organize the elements in table format.
 
-event_data
- ├── Image
- ├── CommandLine
- ├── ProcessGuid
- ├── ProcessId
- ├── ParentImage
- ├── ParentCommandLine
- ├── ParentProcessGuid
- ├── ParentProcessId
- └── User
-
- 
 <img width="1127" height="249" alt="Screenshot 2026-09-21 at 6 22 40 PM" src="https://github.com/user-attachments/assets/86db899f-b984-4fc4-a982-02bfaea8e429" />
 
 
