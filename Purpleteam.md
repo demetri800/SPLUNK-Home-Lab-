@@ -87,7 +87,7 @@ UTM Cloning Cloning - Backups
 
 The lab environment was successfully established with clearly defined attacker and victim roles. This provided a stable baseline for later telemetry collection, adversary simulation, and detection engineering.
 
-____
+
 
 ## STAGE 2: SYSMON INSTALLATION AND CONFIGURATION
 
@@ -114,14 +114,14 @@ ___
 
 <img width="776" height="238" alt="Screenshot 2026-09-05 at 4 25 27 PM" src="https://github.com/user-attachments/assets/7b13334e-1116-45ed-a046-bebab973f350" />
 
+___
 
 **Step #1: Sysmon Startup Configuration:**
 
 <img width="998" height="581" alt="Screenshot 2026-09-05 at 4 05 37 PM" src="https://github.com/user-attachments/assets/8a7d791f-6d0e-408f-be7c-3b37acce0dcb" />
-____
+
 
 <img width="777" height="258" alt="Screenshot 2026-09-05 at 4 25 56 PM" src="https://github.com/user-attachments/assets/46664c0c-ce9b-45ab-a216-d060c3411a5b" />
-
 
 
 <img width="673" height="427" alt="Screenshot 2026-09-05 at 4 27 06 PM" src="https://github.com/user-attachments/assets/a0546a00-8c9c-4afb-aabb-67f568fa8f70" />
@@ -133,6 +133,8 @@ Show me everything in these categories so I can learn what normal activity looks
 <NetworkConnect onmatch="exclude" />
 <DNSQuery onmatch="exclude" />
 
+_____
+
 
 **Step #2: Testing Process-Create Configurations:**
 
@@ -142,7 +144,7 @@ Show me everything in these categories so I can learn what normal activity looks
 
 <img width="879" height="386" alt="Screenshot 2026-09-05 at 4 53 02 PM" src="https://github.com/user-attachments/assets/ef5f2b60-bf53-473a-a954-570cdbd3c546" />
 
-
+____
 
 **Step #3: Sysmon Notepad Process execution test-run:**
 
@@ -155,10 +157,11 @@ WINWORD.EXE
 powershell.exe
       ↓
 rundll32.exe
-___
+_______
+
 
 **Step #4: Testing DNS and Network Connection Sysmon Configuration:**
-__
+
 
 <img width="803" height="258" alt="Screenshot 2026-09-05 at 5 18 59 PM" src="https://github.com/user-attachments/assets/1401318e-ce8e-4120-ba0f-494f47c0c82f" />
 
