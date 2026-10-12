@@ -268,6 +268,9 @@ Step #7: Confirming Windows Powershell Events are reaching Splunk Recieving Host
 
 <img width="1269" height="716" alt="Screenshot 2026-09-07 at 5 16 07 PM" src="https://github.com/user-attachments/assets/2c2274cb-cfb5-44d4-b581-698ba17a0834" />
 
+______
+
+
 **Conclusion:**
 
 The telemetry pipeline from the Windows VM to Splunk was successfully established. This created a centralized data source for later detection engineering, investigation, and cross-source correlation.
@@ -310,7 +313,9 @@ Edited the HTTP Event Collector and reassigned the index so the token would vali
 
 <img width="1427" height="276" alt="Screenshot 2026-09-12 at 10 21 12 AM" src="https://github.com/user-attachments/assets/96f6074c-c1ee-4c38-9d74-38c5e9e55657" />
 
-Resolved: 
+____
+
+**Resolved: SPLUNK Event Ingestion Successfull**
 
 <img width="1101" height="180" alt="Screenshot 2026-09-12 at 10 23 03 AM" src="https://github.com/user-attachments/assets/4f83d632-ae1a-4ace-87b1-6e1b39c118ed" />
 
@@ -318,6 +323,8 @@ Resolved:
 Confirmation from Splunk that it ingested the test event successfully 
 
 <img width="1374" height="617" alt="Screenshot 2026-09-12 at 10 33 56 AM" src="https://github.com/user-attachments/assets/bbdbc892-7dd1-4725-a997-f97a5c62c6b9" />
+
+____
 
 **Step #2: Creating a normal baseline**
 
@@ -413,12 +420,14 @@ whoami
 
 Rather than investigating every process event separately.
 
+___
+
 
 **Conclusion**
 
 A baseline of normal endpoint activity was successfully created. This made it easier to distinguish expected behavior from suspicious activity during later attack simulations.
 
-____
+
 
 
 
@@ -453,6 +462,8 @@ Splunk receives it
         ↓
 Compare it against your Stage 4 baseline
 
+______
+
 **Step #1: Installed Atomic Red Team and verified installation**
 
 <img width="1091" height="454" alt="Screenshot 2026-09-15 at 8 01 59 PM" src="https://github.com/user-attachments/assets/7ca673c9-be09-4f50-be2d-d7e7a247ef84" />
@@ -461,7 +472,7 @@ Compare it against your Stage 4 baseline
 
 <img width="1022" height="185" alt="Screenshot 2026-09-15 at 8 03 00 PM" src="https://github.com/user-attachments/assets/efe806f7-7490-40db-a821-59afb1a38d9f" />
 
-__
+______
 
 Atomic Red Team organizes test by MITRE ATTACK technique 
 
@@ -478,7 +489,6 @@ Atomics reporsitory was present but I was unable to find the attack technique de
 
 
 <img width="810" height="114" alt="Screenshot 2026-09-15 at 8 44 08 PM" src="https://github.com/user-attachments/assets/d2fd1171-cced-4cbc-baf1-cb39927a5a5d" />
-____
 
 
 <img width="1115" height="372" alt="Screenshot 2026-09-15 at 8 41 04 PM" src="https://github.com/user-attachments/assets/d5778d51-0694-40b6-9af8-832f6f3f999d" />
@@ -497,6 +507,9 @@ Based on the output the T1059.001.yaml already exists, but Microsoft Defender is
 
 Microsoft documents Add-MpPreference -ExclusionPath as excluding the specified file or folder from Defender's scheduled and real-time scanning. 
 
+______
+
+
 **Step #2/Resolution: Defender quarantined or altered the file before adding the exclusion, requiring me to reinstall the definitions. Upon troubleshoot, I successfully accessed the details from the T1059.001 definition.**
 
 ___
@@ -513,7 +526,7 @@ ___
 
 <img width="1115" height="541" alt="Screenshot 2026-09-18 at 1 07 45 PM" src="https://github.com/user-attachments/assets/cb079294-7f43-45fa-adb4-7a506c937fdf" />
 
-Step #4: Investigating PowerShell activity from Splunk Otel collector ingestion
+**Step #4: Investigating PowerShell activity from Splunk Otel collector ingestion**
 
 
 **Process Chain:**
@@ -541,7 +554,7 @@ Command line: powershell.exe -e encoded powershell
 suspicious branch of the process tree
 
  
-Analysis chain:
+**Analysis:**
 
 Base 64 Encoded powershell: JgAgACgAZwBjAG0AIAAoACcAaQBlAHsAMAB9ACcAIAAtAGYAIAAnAHgAJwApACkAIAAoACIAVwByACIAKwAiAGkAdAAiACsAIgBlAC0ASAAiACsAIgBvAHMAdAAgACcASAAiACsAIgBlAGwAIgArACIAbABvACwAIABmAHIAIgArACIAbwBtACAAUAAiACsAIgBvAHcAIgArACIAZQByAFMAIgArACIAaAAiACsAIgBlAGwAbAAhACcAIgApAA==
 
@@ -556,7 +569,6 @@ Decoded: & (gcm ('ie{0}' -f 'x')) ("Wr"+"it"+"e-H"+"ost 'H"+"el"+"lo, fr"+"om P"
 <img width="1132" height="546" alt="Screenshot 2026-09-19 at 11 29 39 AM" src="https://github.com/user-attachments/assets/897ec2f2-65bc-48af-a330-3601c7af216e" />
 
 **Step #5: Conducted Cross source validation to correlate the sysmon with the 4688 windows security event.**
-
 
 The snapshots below reveal how the powershell parent process launched the cmd.exe prior to the encoded powershell executable from  cmd.exe
 
@@ -618,6 +630,7 @@ The event_data field was used to build the detection rules and organize the elem
 
 <img width="1127" height="249" alt="Screenshot 2026-09-21 at 6 22 40 PM" src="https://github.com/user-attachments/assets/86db899f-b984-4fc4-a982-02bfaea8e429" />
 
+_____
 
 **Step #2: Writing an SPL Detection**
 
@@ -625,11 +638,15 @@ SPL rule detects a process creation logged by sysmon that matches the commandLin
 
 <img width="1417" height="603" alt="Screenshot 2026-09-21 at 6 24 13 PM" src="https://github.com/user-attachments/assets/295b9d94-785d-45f0-aca8-092c77f8dd8a" />
 
+______
 
 **Step #3: Rerunning adversary simulation**
 
 Re-running Atomic Red to test newly configured detection rule with timestamp
+
 <img width="1110" height="521" alt="Screenshot 2026-09-21 at 6 36 36 PM" src="https://github.com/user-attachments/assets/08d9c0da-45ee-43bc-91d2-ef7bca3cb33f" />
+
+______
 
 **Step #4: Detecting Executions**
 
@@ -639,6 +656,7 @@ The SPL rule successfully detected the encoded powershell process including sign
 
 <img width="830" height="321" alt="Screenshot 2026-09-21 at 6 55 46 PM" src="https://github.com/user-attachments/assets/d27aaedd-6d40-4a7c-a0c8-4068dfec1a80" />
 
+________
 
 **Step #5: Generating harmless powershell activity**
 
@@ -652,7 +670,7 @@ Testing detection rule for false positives by initiating a Write-Ouput process. 
 
 <img width="1418" height="520" alt="Screenshot 2026-09-22 at 10 18 00 PM" src="https://github.com/user-attachments/assets/6ab2d0b6-7e53-4097-af87-bf44800be41b" />
 
-____
+_______
 
 
 **Step #6: Validating detection configuration by using parameter variations of encoded PowerShell.**
@@ -660,12 +678,13 @@ ____
 <img width="1120" height="220" alt="Screenshot 2026-09-22 at 10 58 36 PM" src="https://github.com/user-attachments/assets/1ec98860-01d1-4116-b12a-1d1d5b5a4a50" />
 
 
-
 <img width="1435" height="695" alt="Screenshot 2026-09-22 at 10 57 34 PM" src="https://github.com/user-attachments/assets/dfbc9b9e-29ef-4f52-987f-2d51d5e160b3" />
 
-____
+
 
 Sysmon used to detect the suspicious process → PowerShell 4104 reveals the powershell script being executed
+
+________
 
 **Step #7: Conducting cross-checking on Windows PowerShell Events**
 
@@ -675,6 +694,8 @@ Sysmon used to detect the suspicious process → PowerShell 4104 reveals the pow
 <img width="974" height="115" alt="Screenshot 2026-09-23 at 7 19 11 PM" src="https://github.com/user-attachments/assets/ed132fa7-1ef8-4221-bd37-0acac570006f" />
 
 <img width="739" height="113" alt="Screenshot 2026-09-23 at 7 23 43 PM" src="https://github.com/user-attachments/assets/61f103f3-78d9-464b-9e86-0ee1dc442f77" />
+
+_______
 
 **Step #8: Improving Detection by implementing Parent Process Context**
 
@@ -691,6 +712,8 @@ My goal is the let the alert show the parent, not limited to searching only by c
 
 <img width="566" height="68" alt="Screenshot 2026-09-23 at 8 09 47 PM" src="https://github.com/user-attachments/assets/2d51f818-ea4e-419e-86df-f1deb9db8ead" />
 
+_______
+
 **Conclusion:**
 
 A reusable detection for encoded PowerShell execution was successfully developed and validated. The stage demonstrated how behavioral detection logic can identify suspicious execution patterns while remaining independent of a single test payload.
@@ -704,7 +727,6 @@ This stage focused on simulating Registry Run Key persistence using Atomic Red T
 in Splunk. Sysmon Event ID 13 was used to identify the value change, and the responsible process was correlated through its 
 ProcessGuid.
 
-___
 
 **Objectives:**
 
@@ -732,16 +754,19 @@ Event 14: registry key/value rename
 
 <img width="637" height="378" alt="Screenshot 2026-09-26 at 11 33 37 AM" src="https://github.com/user-attachments/assets/53ee81bd-4fe7-46c9-b56b-bd84a978644c" />
 
+_______
+
 **Step #2: Confirming registry event appears in the updated configuration**
 
 <img width="845" height="416" alt="Screenshot 2026-09-26 at 11 35 15 AM" src="https://github.com/user-attachments/assets/1b81cb9d-d6e6-4ed9-849e-fb5ddd7c6a83" />
+
+_______
 
 **Step #3: Testing SPLUNK ingestion by creating a registry event to prove registry Telementry works**
 
 <img width="1113" height="273" alt="Screenshot 2026-09-26 at 11 39 34 AM" src="https://github.com/user-attachments/assets/98930160-771d-4245-a9e6-b62625f6b8cd" />
 
 <img width="1435" height="619" alt="Screenshot 2026-09-26 at 11 50 49 AM" src="https://github.com/user-attachments/assets/b0d3fa93-f910-4d2f-8b8c-a2fa1aec4168" />
-
 
 Key Fields: These particular fields are necessary for building the process trees for registry specific event 
 
@@ -781,7 +806,7 @@ parent process: cmd.exe → reg.exe →  HKCU\Software\Microsoft\Windows\Current
 
 HKCU: Stores configuration settings, colors, environment variables, and preferences specific to the currently logged-in user.
 
-___
+_______
 
 **Step #6: Cross-Check validating to the Windows Event 4688 logs**
 
@@ -791,7 +816,7 @@ Sysmon Event 1 →  Security 4688 →  Sysmon Event 13
 
 Confirms that the windows event security log also identified and captured the process creation of the registry key modification.
 
-____
+________
 
 **Step #7: Building real dectection against potentially malicious registry key changes** 
 
@@ -819,11 +844,15 @@ index=purple_team_lab event_id.id=13 → Examine Sysmon 13 events only
 
 The keys are folders that contain the configuration settings of how your devices system and applications start-up and operate. The critical keys like autorun logon and defense keys are targeted by attackers to establish persistence upon log-on or disable security
 
+_____
+
 **Step #8: Validate and prove legitamite software can also run keys and which may create instances of false positives**
 
 <img width="1109" height="98" alt="Screenshot 2026-09-26 at 3 31 11 PM" src="https://github.com/user-attachments/assets/e459304e-e059-4570-9bfe-11903ebf4eaa" />
 
 <img width="1434" height="647" alt="Screenshot 2026-09-26 at 3 30 43 PM" src="https://github.com/user-attachments/assets/1d785338-96af-4605-9ec3-938f95c6e072" />
+
+________
 
 **Step #9: Proving Sysmon 13 events successfully detects T1547.001 ATTACK technique against the registry**
 
@@ -832,6 +861,8 @@ The keys are folders that contain the configuration settings of how your devices
 <img width="1385" height="408" alt="Screenshot 2026-09-26 at 4 07 17 PM" src="https://github.com/user-attachments/assets/8a6d21e0-c97e-40aa-b4df-f116bbb95da5" />
 
 <img width="869" height="237" alt="Screenshot 2026-09-27 at 12 27 31 PM" src="https://github.com/user-attachments/assets/5198040e-5ca7-49d1-853b-eac31213d2ff" />
+
+________
 
 **Conclusion:**
 
@@ -925,6 +956,8 @@ ParentProcessId
  +
  <Arguments>...</Arguments> c calc.exe
 
+_________
+
 
 **Step #3: Finding the process that created the task**
 
@@ -939,6 +972,8 @@ The following image details the sysmon log event.id 1
 Name of the scheduled task: T1053_005_OnStartup
 
 cmd.exe /c calc.exe → scheduled task launches cmd.exe, and cmd.exe is told with /c to run calc.exe and then exit.
+
+_______
 
 
 **Step #4: Confirmation cross source validation was successful with Sysmon even 1, Windows 4688 and 4968 log sources detected the task creation.**
@@ -977,6 +1012,9 @@ TaskContent XML
 reveals trigger + command + principal
 
 
+________
+
+
 **Step #5: Building Scheduled detection**
 
 This is a broader search that detects all task creation events and organizes events in table format
@@ -991,6 +1029,9 @@ index=purple_team_lab event_id.id=4698
 | eval detection_name="Scheduled Task Creation"
 | eval mitre_technique="T1053.005"
 | table _time host SubjectDomainName SubjectUserName detection_name mitre_technique TaskName TaskContent ClientProcessId ParentProcessId
+
+_______
+
 
 **Step #6: Enriching Broad Detection**
 This part is as an extension of the previous query allowing the detection rule to match the task content with keywords such as powershell, cmd, and rundll32. These are among the more common exploitable services that threats typically use when performing task creation attacks to maintain persistence on a victims machine:
@@ -1022,7 +1063,7 @@ THEN:
 
 Splunk assigns → context = Command shell execution
 
-___
+_______
 
 **Step #7: Peforming Negative Testing**
 
@@ -1036,7 +1077,7 @@ Context fields works as intended and assigns "review task creation" instead of "
 
 <img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
 
-___
+_________
 
 **Step #8: Validated Atomic and the production of new test events:**
 
@@ -1050,11 +1091,12 @@ Invoke-AtomicTest T1053.005 -TestNumbers 1
 
 <img width="968" height="181" alt="Screenshot 2026-09-28 at 12 57 42 PM" src="https://github.com/user-attachments/assets/61633c2e-76c7-436d-bcd9-f4121ac872e2" />
 
+_______
+
 **Conclusion:**
 
 Scheduled-task creation was successfully detected and correlated with the process that created the task. The stage demonstrated how task configuration and process telemetry can be combined to investigate potential persistence mechanisms.
 
-_____
 
 
 ## STAGE 9: Kali Network Attack Simulation - Brute Forcing
@@ -1082,6 +1124,8 @@ This stage introduced Kali Linux as an external attack source. Nmap was used to 
 KALI-RED01 → Network reconnaissance → WIN-VICTIM01 → SMB authentication attempts → Windows Security 4625 → 
 Splunk → Brute-force-detection
 
+_______
+
 **Step #1: Ensuring connectivity between windows and kali machine**
 
 <img width="485" height="116" alt="Screenshot 2026-09-28 at 3 11 41 PM" src="https://github.com/user-attachments/assets/f45e40ce-88a4-4371-b956-a2fcfca2fa2f" />
@@ -1089,7 +1133,7 @@ Splunk → Brute-force-detection
 <img width="726" height="259" alt="Screenshot 2026-09-28 at 3 11 55 PM" src="https://github.com/user-attachments/assets/5e69a9f3-5dee-4639-8e21-443426eecaee" />
 
 
-____
+_______
 
 Nmap was tested from Kali on the WindowsVIC-01 but the the windows firewall blocked the port status details. Unable to determine if any of the ports are open or closed. 
 
@@ -1127,6 +1171,8 @@ Sub-status - 0xc000006a - UserName was correct but the password is wrong
 
 WorkstationName and IP address defines what account/source generated them.
 
+_________
+
 **Step #9: Enriching Detection by implemeting a 5 minute window Threshold**
 
 The following SPL command was built for tracking logon attempts exceeding or equal to five occurring within a five minute timeframe. 
@@ -1153,7 +1199,7 @@ This new rule enhance the pervious base detection by defining the severity based
 
 <img width="1388" height="161" alt="Screenshot 2026-10-03 at 10 05 18 AM" src="https://github.com/user-attachments/assets/34dee98e-be3f-4a9d-85c7-2ec0c034c3d7" />
 
-____
+_______
 
 **Conclusion:**
 
@@ -1180,27 +1226,35 @@ This stage expanded the password-guessing detection by correlating multiple fail
 11. Demonstrate multi-event incident correlation in Splunk.
 12. Preserve the timeline as evidence for the final project.
 
+_________
+
 
 **Step #1: Generating correlation sequence by simulating failed logon attempts**
 
 <img width="502" height="198" alt="Screenshot 2026-10-03 at 12 42 15 PM" src="https://github.com/user-attachments/assets/8042fc47-c08f-49c6-ac45-81e6a32d0384" />
 
+________
 
 **Step #2: Confirmation of the failed smb logon events from SPLUNK ingestion**
 
 
 <img width="1412" height="483" alt="Screenshot 2026-10-03 at 12 50 49 PM" src="https://github.com/user-attachments/assets/94289714-d1be-4281-975f-cccd84340314" />
 
+________
 
 **Step #3: Successful Authentication confirmed**
 
 
 <img width="1434" height="388" alt="Screenshot 2026-10-03 at 1 01 18 PM" src="https://github.com/user-attachments/assets/538bf108-470b-4091-83e0-9a8ed04283e3" />
 
+________
+
 **Step #4: Consolidating failures and successful logons to establish a timeline**
 
 
 <img width="1419" height="652" alt="Screenshot 2026-10-03 at 2 08 24 PM" src="https://github.com/user-attachments/assets/04b38b8c-1e2f-40e7-9b43-d45ec79bd33a" />
+
+_______
 
 **Step #5: Correlation detection build**
 
@@ -1217,6 +1271,8 @@ Does the authentication method makes sense and is it normal according to the the
 Do the failures immediately precede the success?
 
 What activity occurred after authentication? 
+
+_________
 
 **Conclusion:**
 
@@ -1236,6 +1292,7 @@ This final stage of my project focuses on consolidating all of the SPL detection
 4. Create charts for authentication activity and telemetry overview.
 5. Consolidate MITRE ATT&CK mappings across the project.
 
+______
 
 **Panel #1: Encoded Powershell T1059.001** 
 
@@ -1243,35 +1300,37 @@ This final stage of my project focuses on consolidating all of the SPL detection
 
 <img width="1398" height="339" alt="Screenshot 2026-10-06 at 11 32 16 PM" src="https://github.com/user-attachments/assets/6b77d22d-b798-41e6-922f-945fdb03b99b" />
 
-___
+________
 
 **Panel #2: Registry Persistence T1547.001** 
 
 <img width="1410" height="295" alt="Screenshot 2026-10-06 at 11 32 54 PM" src="https://github.com/user-attachments/assets/7b2603a6-fec4-49ec-bdc0-148a80af9dd9" />
 
-__
+_______
 
 **Panel #3: Scheduled Task Creation Persistence T1053.005**
 
 <img width="1404" height="197" alt="Screenshot 2026-10-06 at 11 33 41 PM" src="https://github.com/user-attachments/assets/dfa32b1f-d9ea-4586-bd97-835b8fa00153" />
 
-__
+______
 
 **Panel #4: Repeated Failed Network Logons - Brute Force Detection T1110**
 
 <img width="724" height="262" alt="Screenshot 2026-10-06 at 11 35 22 PM" src="https://github.com/user-attachments/assets/8bb70c71-dbe9-4f08-9840-c00c61412e83" />
 
-__
+_______
 
 **Panel #5: Successful Login Following Repeated Failures**
 
 <img width="1413" height="210" alt="Screenshot 2026-10-06 at 11 35 43 PM" src="https://github.com/user-attachments/assets/40bec732-ea8b-4b51-9d25-5bcc6e20e372" />
 
-__
+________
 
 **Panel #6: Event Telemetry Overview**
 
 <img width="688" height="266" alt="Screenshot 2026-10-06 at 11 36 31 PM" src="https://github.com/user-attachments/assets/8bfb46af-d2dc-4d5d-98fe-5331741c5149" />
+
+_______
 
 **Project Conclusion:**
 
