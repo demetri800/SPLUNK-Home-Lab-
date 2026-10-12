@@ -204,7 +204,7 @@ Splunk token creation and HTTP Event Collector
 
 <img width="662" height="259" alt="Screenshot 2026-09-06 at 3 09 07 PM" src="https://github.com/user-attachments/assets/69d3aea5-34a8-4886-98f8-e52a8626709e" />
 
-**Step #1: Created the Authorization Token for the Collector to verify identity and ingest the sysmon logs.**
+**Step #1: Created the Authorization Token for OTEL Collector to verify identity and ingest the sysmon logs.**
 
 <img width="760" height="117" alt="Screenshot 2026-09-06 at 3 21 38 PM" src="https://github.com/user-attachments/assets/00495f27-ec9a-49e4-8fba-62f403a2fc24" />
 
@@ -837,7 +837,7 @@ Registry persistence activity was successfully detected and traced back to the p
 __
 
 
-## STAGE 8: Scheduled ATTACK persistence
+## STAGE 8: SCHEDULED-TASK PERSISTENCE
 
 **Summary:**
 
@@ -989,7 +989,7 @@ index=purple_team_lab event_id.id=4698
 | eval mitre_technique="T1053.005"
 | table _time host SubjectDomainName SubjectUserName detection_name mitre_technique TaskName TaskContent ClientProcessId ParentProcessId
 
-Step #6: 
+**Step #6: Enriching Broad Detection**
 This part is as an extension of the previous query allowing the detection rule to match the task content with keywords such as powershell, cmd, and rundll32. These are among the more common exploitable services that threats typically use when performing task creation attacks to maintain persistence on a victims machine:
 
 | eval context=case(
@@ -1019,6 +1019,8 @@ THEN:
 
 Splunk assigns → context = Command shell execution
 
+___
+
 **Step #7: Peforming Negative Testing**
 
 
@@ -1031,6 +1033,7 @@ Context fields works as intended and assigns "review task creation" instead of "
 
 <img width="1440" height="567" alt="Screenshot 2026-09-28 at 12 13 06 PM" src="https://github.com/user-attachments/assets/35faccc0-cf66-40e9-b589-fd71dd108311" />
 
+___
 
 **Step #8: Validated Atomic and the production of new test events:**
 
@@ -1047,6 +1050,8 @@ Invoke-AtomicTest T1053.005 -TestNumbers 1
 **Conclusion:**
 
 Scheduled-task creation was successfully detected and correlated with the process that created the task. The stage demonstrated how task configuration and process telemetry can be combined to investigate potential persistence mechanisms.
+
+_____
 
 
 ## STAGE 9: Kali Network Attack Simulation - Brute Forcing
