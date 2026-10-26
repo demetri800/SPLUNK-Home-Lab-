@@ -19,29 +19,51 @@ The primary objective of Stage 1 is to develop a foundational understanding of P
 
 
 **Lesson 1.1: Powershell Commands and Pipelines**
- 
-
-**Step #1: Get-Process Command:**
 
 
-**Screenshot: Variable Assignment**
+**Screenshot 1 — Process Enumeration (Get-Process)**
+
+Executed the Get-Process cmdlet to retrieve information about active processes on the Windows 11 endpoint. This command provides visibility into running applications, process IDs, and resource consumption, establishing a foundation for endpoint investigations.
 
 <img width="675" height="298" alt="Screenshot 2026-10-26 at 12 37 31 PM" src="https://github.com/user-attachments/assets/159eeb8f-eb2a-4181-910d-3198fd7cf004" />
 ____
 
-The | symbol is called the pipeline operator.
 
-It passes the output of one command into another command.
+**Screenshot 2 — PowerShell Pipeline (Select-Object)**
 
-____
-
-**Screenshot #2: Process filtering**
+Utilized the PowerShell pipeline operator (|) to pass process information from Get-Process to Select-Object. Limited the output to the first five processes to demonstrate how pipelines can organize and control command results.
 
 <img width="702" height="209" alt="Screenshot 2026-10-26 at 12 39 09 PM" src="https://github.com/user-attachments/assets/a3042320-83be-4273-a261-21e002f0f569" />
 
+____
 
+**Screenshot 3 — Process Property Selection**
 
+Executed Get-Process with Select-Object to display specific process properties, including ProcessName, Id, and CPU. This demonstrated how to extract relevant information from PowerShell objects for targeted system analysis.
 
+<img width="756" height="327" alt="Screenshot 2026-10-26 at 1 38 51 PM" src="https://github.com/user-attachments/assets/0b951ce5-26c4-4bf5-a86e-f8f27e18da98" />
+
+____
+
+**Screenshot 4 — Process Sorting and Analysis**
+
+Combined Get-Process, Sort-Object, and Select-Object to identify the ten processes with the highest accumulated CPU time. This exercise demonstrated the ability to sort and analyze process information using multiple PowerShell commands.
 
 <img width="1093" height="332" alt="Screenshot 2026-10-26 at 1 20 36 PM" src="https://github.com/user-attachments/assets/088f9ae6-1833-447a-818b-b136135da7c2" />
+
+
+____
+
+
+**Lesson 1.2 — Variables, Objects, and Filtering**
+
+**Objective:**
+
+Develop a foundational understanding of how PowerShell stores, organizes, and filters information using variables and objects. Apply these concepts to retrieve Windows process data, examine individual properties, and isolate process activity based on defined investigative conditions. The goal is to being able to construct PowerShell commands that combine these techniques to retrieve specific security-related information.
+
+
+
+
+
+
 
