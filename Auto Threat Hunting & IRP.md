@@ -102,6 +102,14 @@ ___
 
 Where-Object allows you to return only the objects that satisfy a particular condition. This is especially useful during security investigations when you're dealing with hundreds or thousands of records.
 
+____
+
+**GitHub Screenshot #3 — Process Filtering**
+
+Utilized the Where-Object cmdlet and the -gt comparison operator to filter Windows processes based on accumulated CPU time. This exercise demonstrated how conditional filtering can isolate relevant process information during endpoint investigations.
+
+____
+
 Command Breakdown:
 
 $_ — Current object
@@ -115,12 +123,6 @@ Specifies which property you're examining.
 -gt — Greater than
 
 Compares the CPU property's value against the number 100.
-
-____
-
-**GitHub Screenshot #3 — Process Filtering**
-
-Utilized the Where-Object cmdlet and the -gt comparison operator to filter Windows processes based on accumulated CPU time. This exercise demonstrated how conditional filtering can isolate relevant process information during endpoint investigations.
 
 ____
 
