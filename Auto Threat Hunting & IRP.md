@@ -17,6 +17,8 @@ ________
 
 The primary objective of Stage 1 is to develop a foundational understanding of PowerShell scripting and its practical applications in cybersecurity investigations and Windows system administration. This stage will focus on learning PowerShell syntax, commands, variables, pipelines, conditional statements, loops, functions, and error handling. These concepts will be applied to retrieving and analyzing Windows system information, including running processes, network connections, and security event logs. Through hands-on exercises, the goal is to progressively develop the ability to independently write, troubleshoot, and execute PowerShell scripts that automate repetitive security investigation tasks. By the conclusion of this stage, a functional PowerShell investigation script will be developed to collect, filter, and export relevant Windows security information, establishing the foundation for more advanced threat hunting and automated incident response capabilities in subsequent stages.
 
+____
+
 
 **LESSON 1.1: POWERSHELL COMMANDS AND PIPELINES**
 
