@@ -20,12 +20,15 @@ The primary objective of Stage 1 is to develop a foundational understanding of P
 
 **Lesson 1.1: Powershell Commands and Pipelines**
 
+_____
+
 
 **Screenshot 1 — Process Enumeration (Get-Process)**
 
 Executed the Get-Process cmdlet to retrieve information about active processes on the Windows 11 endpoint. This command provides visibility into running applications, process IDs, and resource consumption, establishing a foundation for endpoint investigations.
 
 <img width="675" height="298" alt="Screenshot 2026-10-26 at 12 37 31 PM" src="https://github.com/user-attachments/assets/159eeb8f-eb2a-4181-910d-3198fd7cf004" />
+
 ____
 
 
