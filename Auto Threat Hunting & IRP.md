@@ -20,7 +20,7 @@ The primary objective of Stage 1 is to develop a foundational understanding of P
 ____
 
 
-**LESSON 1.1: POWERSHELL COMMANDS AND PIPELINES**
+**LESSON 1.1 - POWERSHELL COMMANDS AND PIPELINES**
 
 _____
 
@@ -60,15 +60,70 @@ Combined Get-Process, Sort-Object, and Select-Object to identify the ten process
 ____
 
 
-**Lesson 1.2 — Variables, Objects, and Filtering**
+**LESSON 1.2 — VARIABLES, OBJECTS, and FILTERING**
 
 **Objective:**
 
 Develop a foundational understanding of how PowerShell stores, organizes, and filters information using variables and objects. Apply these concepts to retrieve Windows process data, examine individual properties, and isolate process activity based on defined investigative conditions. The goal is to being able to construct PowerShell commands that combine these techniques to retrieve specific security-related information.
 
+___
+
+**Step 1 — Understanding PowerShell variables**
+
+A variable allows you to store information in memory and reference it later without repeatedly executing the original command.
+
+**Screenshot #1 — Variable Assignment**
+
+Created a PowerShell variable to store active Windows process information using the Get-Process cmdlet. Retrieved the number of stored process objects using the .Count property, demonstrating how variables can retain information for further analysis.
+___
+
+<img width="928" height="473" alt="Screenshot 2026-10-26 at 1 57 20 PM" src="https://github.com/user-attachments/assets/877b4d13-94f3-4c90-88a5-e02b775435fe" />
+
+<img width="455" height="64" alt="Screenshot 2026-10-26 at 2 06 03 PM" src="https://github.com/user-attachments/assets/464c41b8-d2d2-4424-9f12-098fd3038c3e" />
 
 
+____
 
 
+**Step 2 — Understanding PowerShell objects**
+
+When you execute Get-Process, PowerShell returns structured objects. Each process object contains individual properties that describe it.
+
+
+**GitHub Screenshot #2 — PowerShell Object Properties**
+
+Accessed individual properties of a Windows process object using PowerShell array indexing and the Select-Object cmdlet. Extracted the process name, process ID, and accumulated CPU time to demonstrate targeted retrieval of structured endpoint information.
+___
+
+<img width="849" height="369" alt="Screenshot 2026-10-26 at 2 15 40 PM" src="https://github.com/user-attachments/assets/5d0199cb-b978-4495-9076-44f5f6bd53d8" />
+
+
+**Step 3 — Filtering processes using Where-Object**
+
+Where-Object allows you to return only the objects that satisfy a particular condition. This is especially useful during security investigations when you're dealing with hundreds or thousands of records.
+
+Command Breakdown:
+
+$_ — Current object
+
+Represents the current process being examined as PowerShell evaluates each object in the pipeline.
+
+.CPU — Object property
+
+Specifies which property you're examining.
+
+-gt — Greater than
+
+Compares the CPU property's value against the number 100.
+
+____
+
+**GitHub Screenshot #3 — Process Filtering**
+
+Utilized the Where-Object cmdlet and the -gt comparison operator to filter Windows processes based on accumulated CPU time. This exercise demonstrated how conditional filtering can isolate relevant process information during endpoint investigations.
+
+____
+
+<img width="817" height="253" alt="Screenshot 2026-10-26 at 2 21 25 PM" src="https://github.com/user-attachments/assets/be33a212-a126-4d6b-af58-38883df9f591" />
 
 
