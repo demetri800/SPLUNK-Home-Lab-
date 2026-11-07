@@ -11,7 +11,7 @@ The final objective is to conduct a comprehensive simulated security incident in
 
 ________
 
-## STAGE #1: LEARNING OBJECTIVE** 
+## STAGE #1: LEARNING OBJECTIVE
 
 **Stage Summary:** 
 
@@ -127,5 +127,25 @@ Compares the CPU property's value against the number 100.
 ____
 
 <img width="817" height="253" alt="Screenshot 2026-10-26 at 2 21 25 PM" src="https://github.com/user-attachments/assets/be33a212-a126-4d6b-af58-38883df9f591" />
+
+_____
+
+**Challenge #2 — Investigating a Specific Windows Process**
+
+Scenario: As a SOC analyst, you're reviewing a Windows endpoint and want to identify all instances of svchost.exe running on the system.
+
+_____
+
+
+<img width="1200" height="197" alt="Screenshot 2026-11-07 at 11 38 33 AM" src="https://github.com/user-attachments/assets/1f3e4b55-27c5-4406-a8be-6fd23e75e10b" />
+
+______
+
+Developed a PowerShell command to identify active svchost process instances using the Where-Object cmdlet and the -eq comparison operator. Extracted relevant process properties to demonstrate the ability to independently filter and investigate specific Windows system processes.
+
+____
+
+
+
 
 
