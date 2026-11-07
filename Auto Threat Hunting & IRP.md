@@ -227,6 +227,7 @@ _____
 
 <img width="801" height="318" alt="Screenshot 2026-11-07 at 1 17 48 PM" src="https://github.com/user-attachments/assets/bc26256f-f57c-46c5-8a7b-99905a17c995" />
 
+_____
 
 
 **Challenege #3 — Authentication Activity Classification**
