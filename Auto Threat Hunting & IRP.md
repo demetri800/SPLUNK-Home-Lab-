@@ -196,16 +196,46 @@ _____
 
 A loop allows you to execute a block of code repeatedly without manually running the same command each time. Imagine you're reviewing authentication activity involving multiple simulated accounts or events. Rather than analyzing one value at a time, you want the script to process an entire collection.
 
-___
+______
 
 **Screenshot #3 — PowerShell Foreach Loop**
-____
+______
 
 <img width="666" height="162" alt="Screenshot 2026-11-07 at 12 48 27 PM" src="https://github.com/user-attachments/assets/a8f03be9-6ead-4f74-be62-9232b7d0847b" />
 
+_____
 
 **Exercise 1.3.4 — Windows Process Inspection**
 
+Writing a script that checks whether specific process names are currently running and reports the results. This is a basic form of automated endpoint inspection.
+
+1. Defines three process names to examine.
+2. Iterates through each process name.
+3. Uses Get-Process to check for running instances.
+4. Stores the returned results in an array.
+5. Uses an if statement to determine whether any instances were found.
+6. Displays the result for each process.
+
+-ErrorAction SilentlyContinue suppresses non-terminating error messages, including those produced when no process matches a specified name.
+
+Your results will depend on which applications are currently running.
+
+____
+
+**Screenshot #4 — Automated Process Inspection**
+_____
+
+<img width="801" height="318" alt="Screenshot 2026-11-07 at 1 17 48 PM" src="https://github.com/user-attachments/assets/bc26256f-f57c-46c5-8a7b-99905a17c995" />
+
+
+
+**Challenege #3 — Authentication Activity Classification**
+
+Developed a PowerShell script using foreach iteration and conditional statements to classify simulated failed authentication counts. Implemented threshold-based logic to categorize activity as Low, Review, or High, demonstrating foundational security automation and decision-making capabilities.
+
+_____
+
+<img width="583" height="325" alt="Screenshot 2026-11-07 at 2 10 11 PM" src="https://github.com/user-attachments/assets/69ea8d2b-e6f0-429d-b562-2fb6085465b3" />
 
 
 
