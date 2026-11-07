@@ -68,7 +68,7 @@ Develop a foundational understanding of how PowerShell stores, organizes, and fi
 
 ___
 
-**Step 1 — Understanding PowerShell variables**
+**Step 1.2.1 — Understanding PowerShell variables**
 
 A variable allows you to store information in memory and reference it later without repeatedly executing the original command.
 
@@ -85,7 +85,7 @@ ___
 ____
 
 
-**Step 2 — Understanding PowerShell objects**
+**Step 1.2.2 — Understanding PowerShell objects**
 
 When you execute Get-Process, PowerShell returns structured objects. Each process object contains individual properties that describe it.
 
@@ -98,7 +98,7 @@ ___
 <img width="849" height="369" alt="Screenshot 2026-10-26 at 2 15 40 PM" src="https://github.com/user-attachments/assets/5d0199cb-b978-4495-9076-44f5f6bd53d8" />
 
 
-**Step 3 — Filtering processes using Where-Object**
+**Step 1.2.3 — Filtering processes using Where-Object**
 
 Where-Object allows you to return only the objects that satisfy a particular condition. This is especially useful during security investigations when you're dealing with hundreds or thousands of records.
 
@@ -145,6 +145,66 @@ Developed a PowerShell command to identify active svchost process instances usin
 
 ____
 
+**LESSON 1.3 — CONDITIONAL STATEMENTS**
+
+**Objective:**
+
+Develop an understanding of conditional statements and iterative programming in PowerShell, allowing scripts to evaluate security-related conditions and automatically perform different actions based on their findings.
+
+By the end of this lesson, you will be able to:
+- Use if, elseif, and else statements to evaluate conditions.
+- Understand comparison and logical operators.
+- Use foreach loops to process multiple values.
+- Combine loops and conditional statements to evaluate Windows processes.
+- Create a basic rule-based security analysis script using simulated authentication data.
+These concepts form the foundation for automated security investigations.
+
+_____
+
+**Step: 1.3.1**
+
+Monitoring Windows Security Event ID 4625, which represents a failed logon attempt.
+
+You want your script to identify when an account exceeds a specified failed authentication threshold.
+_____
+
+**Screenshot #1 — Conditional Threshold Evaluation**
+_____
+
+<img width="680" height="132" alt="Screenshot 2026-11-07 at 12 12 35 PM" src="https://github.com/user-attachments/assets/e0c34f9a-7ae3-4cf6-a802-721d02b2a605" />
+______
+
+SOC application: This basic logic is one component of threshold-based detections. In an actual investigation, we'd need to count real authentication events within a defined time window and consider factors such as account, source address, and baseline activity.
+
+
+**Exercise 1.3.2 — Building Multiple Conditions**
+
+Classifying simulated authentication activity into three categories:
+- Low activity: fewer than 5 failures.
+- Review: 5–9 failures.
+- High activity: 10 or more failures.
+
+________
+
+**Screenshot #2 — Multiple Conditional Statements**
+_____
+
+<img width="617" height="236" alt="Screenshot 2026-11-07 at 12 32 52 PM" src="https://github.com/user-attachments/assets/1119382c-3ae7-4301-afe6-eb11a314c212" />
+
+
+**Exercise 1.3.3 — Create a foreach loop**
+
+A loop allows you to execute a block of code repeatedly without manually running the same command each time. Imagine you're reviewing authentication activity involving multiple simulated accounts or events. Rather than analyzing one value at a time, you want the script to process an entire collection.
+
+___
+
+**Screenshot #3 — PowerShell Foreach Loop**
+____
+
+<img width="666" height="162" alt="Screenshot 2026-11-07 at 12 48 27 PM" src="https://github.com/user-attachments/assets/a8f03be9-6ead-4f74-be62-9232b7d0847b" />
+
+
+**Exercise 1.3.4 — Windows Process Inspection**
 
 
 
