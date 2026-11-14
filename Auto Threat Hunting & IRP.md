@@ -239,4 +239,56 @@ _____
 <img width="583" height="325" alt="Screenshot 2026-11-07 at 2 10 11 PM" src="https://github.com/user-attachments/assets/69ea8d2b-e6f0-429d-b562-2fb6085465b3" />
 
 
+**LESSON 1.4 - Understanding PowerShell functions**
+
+**Objective:** 
+
+Develop the ability to create reusable PowerShell functions and implement error-handling mechanisms that allow security investigation scripts to execute reliably, accept input parameters, and respond appropriately to unexpected conditions.
+
+**Exercise 1.4.1 — Create your first function**
+
+_____
+
+**Screenshot #1 — Creating a PowerShell Function**
+
+_____
+
+Developed a reusable PowerShell function to retrieve Windows process information using a configurable input parameter. Demonstrated function creation, parameter passing, and targeted process enumeration to support repeatable endpoint investigations.
+
+_____
+
+<img width="582" height="418" alt="Screenshot 2026-11-11 at 4 54 39 PM" src="https://github.com/user-attachments/assets/960226c7-b618-4d7e-a597-3dd62ef49f64" />
+
+
+**Exercise 1.4.2 — Create an authentication classification function**
+
+****Screenshot #2 — Parameterized Authentication Analysis****
+_____
+
+Developed a parameterized PowerShell function that uses conditional logic to classify simulated authentication failure counts. Integrated the function with a foreach loop, demonstrating reusable decision-making logic for security automation workflows.
+
+_____
+
+<img width="785" height="283" alt="Screenshot 2026-11-11 at 5 31 06 PM" src="https://github.com/user-attachments/assets/1cf5591c-68a3-4e76-a46d-fcfac52370f8" />
+
+______
+
+**Exercise 1.4.3 - Understanding error handling with try and catch**
+
+During an investigation, your script might encounter an unavailable process, inaccessible file, or failed system command.
+Without proper error handling, a script might terminate unexpectedly, continue with incomplete information, or produce misleading results.
+PowerShell provides try and catch blocks to handle terminating errors
+______
+
+**Screenshot #3 — PowerShell Error Handling**
+
+<img width="1097" height="181" alt="Screenshot 2026-11-14 at 12 30 42 PM" src="https://github.com/user-attachments/assets/670c6e34-d173-42ea-9cc8-c0f7c58fa479" />
+
+________
+
+Implemented PowerShell exception handling using try, catch, and -ErrorAction Stop to manage unsuccessful process queries. Demonstrated how security automation scripts can detect execution failures and provide informative warnings rather than silently ignoring errors.
+
+Exercise 1.4.4 — Combining functions and error handling
+
+
 
